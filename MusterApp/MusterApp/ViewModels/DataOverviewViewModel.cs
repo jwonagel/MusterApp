@@ -49,6 +49,7 @@ namespace MusterApp.ViewModels
         private ObservableCollection<pod> pods;
 
         private ICommand invoiceCommand;
+        private ICommand generateConfigCommand;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataOverviewViewModel"/> class.
@@ -94,6 +95,24 @@ namespace MusterApp.ViewModels
             {
                 return this.invoiceCommand ?? (this.invoiceCommand = new RelayCommand(this.ExecuteInvoice));
             }
+        }
+
+        public ICommand GenerateConfigCommand
+        {
+            get
+            {
+                return this.generateConfigCommand ?? (this.generateConfigCommand = new RelayCommand(this.ExecuteGenerateConfig));
+            }
+        }
+
+        private void ExecuteGenerateConfig(object obj)
+        {
+            var device = obj as device;
+            if (device == null)
+            {
+                return;
+            }
+            
         }
 
         private void ExecuteInvoice(object obj)
