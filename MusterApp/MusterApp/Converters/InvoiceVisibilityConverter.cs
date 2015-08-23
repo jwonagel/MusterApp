@@ -59,6 +59,11 @@ namespace MusterApp.Converters
             try
             {
                 var invoice = (abrechnung)value;
+                if (invoice == null)
+                {
+                    return false;
+                }
+
                 if (invoice.fakturierungsdatum == null)
                 {
                     return true;

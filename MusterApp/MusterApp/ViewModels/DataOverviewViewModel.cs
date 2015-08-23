@@ -43,14 +43,43 @@ namespace MusterApp.ViewModels
         private bool isOverviewVisible = true;
 
         /// <summary>
+        /// The is config visible.
+        /// </summary>
+        private bool isConfigVisible;
+
+        /// <summary>
+        /// The is invoice visible.
+        /// </summary>
+        private bool isInvoiceVisible;
+
+        /// <summary>
         /// The context.
         /// </summary>
         private MusterDbContext context;
+
+        /// <summary>
+        /// The pods.
+        /// </summary>
         private ObservableCollection<pod> pods;
 
+        /// <summary>
+        /// The invoice command.
+        /// </summary>
         private ICommand invoiceCommand;
+
+        /// <summary>
+        /// The generate config command.
+        /// </summary>
         private ICommand generateConfigCommand;
+
+        /// <summary>
+        /// The config.
+        /// </summary>
         private string config;
+
+        private ICommand configButton;
+
+        private ICommand invoiceButton;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataOverviewViewModel"/> class.
@@ -77,6 +106,38 @@ namespace MusterApp.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is config visible.
+        /// </summary>
+        public bool IsConfigVisible
+        {
+            get
+            {
+                return this.isConfigVisible;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.isConfigVisible, value, () => this.IsConfigVisible);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is invoice visible.
+        /// </summary>
+        public bool IsInvoiceVisible
+        {
+            get
+            {
+                return this.isInvoiceVisible;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.isInvoiceVisible, value, () => this.IsInvoiceVisible);
+            }
+        }
+
+        /// <summary>
         /// Gets the overview button.
         /// </summary>
         public ICommand OverviewButton
@@ -86,6 +147,26 @@ namespace MusterApp.ViewModels
                 return this.overviewButton ?? (this.overviewButton = new RelayCommand(this.ExecuteOverview));
             }
         }
+
+        public ICommand ConfigButton
+        {
+            get
+            {
+                return this.configButton ?? (this.configButton = new RelayCommand(this.ExecuteConfig));
+            }
+        }
+
+
+
+        public ICommand InvoiceButton
+        {
+            get
+            {
+                return this.invoiceButton ?? (this.invoiceButton = new RelayCommand(this.ExecuteInvoiceView));
+            }
+        }
+
+ 
 
         /// <summary>
         /// Gets the overview button.
@@ -98,6 +179,9 @@ namespace MusterApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the generate config command.
+        /// </summary>
         public ICommand GenerateConfigCommand
         {
             get
@@ -106,6 +190,12 @@ namespace MusterApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// The execute generate config.
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
         private void ExecuteGenerateConfig(object obj)
         {
             var device = obj as device;
@@ -113,6 +203,7 @@ namespace MusterApp.ViewModels
             {
                 return;
             }
+
             var netzwerkInterface = device.netzwerkinterface.ToList();
             var vlansList = device.netzwerkinterface.Select(v => v.vlan);
             var vlans = new List<vlan>();
@@ -123,8 +214,9 @@ namespace MusterApp.ViewModels
                     vlans.Add(vlan);
                 }
             }
+
             string vlanConfig = string.Empty;
-            foreach(var vlan in vlans)
+            foreach (var vlan in vlans)
             {
                 vlanConfig += "vlan " + vlan.id_vlan;
                 vlanConfig += "\n\t";
@@ -132,8 +224,7 @@ namespace MusterApp.ViewModels
                 vlanConfig += "\n\n";
             }
 
-
-            string nwifsConfig =string.Empty;
+            var nwifsConfig =string.Empty;
             foreach (var netzwerkif in netzwerkInterface)
             {
                 var vlan = netzwerkif.vlan;
@@ -143,7 +234,6 @@ namespace MusterApp.ViewModels
                     nwifsConfig += "\n\t";
                     nwifsConfig +=  ""+ netzwerkif.name;
                 }
-                
             }
 
             var credentials = device.administrativ_credentials_snmp_comunity.Select(a => a.administrativ_credentials);
@@ -153,16 +243,47 @@ namespace MusterApp.ViewModels
             this.Config = "test \n test";
         }
 
+        /// <summary>
+        /// The execute invoice.
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         private void ExecuteInvoice(object obj)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// The execute invoice view.
+        /// </summary>
+        private void ExecuteInvoiceView()
+        {
+            this.IsConfigVisible = false;
+            this.IsInvoiceVisible = true;
+            this.IsOverviewVisible = false;
+        }
+
+        /// <summary>
+        /// The execute config.
+        /// </summary>
+        private void ExecuteConfig()
+        {
+            this.IsConfigVisible = true;
+            this.IsInvoiceVisible = false;
+            this.IsOverviewVisible = false;
+        }
+
+        /// <summary>
+        /// Gets or sets the config.
+        /// </summary>
         public string Config
         {
             get
             {
-                if(config == null)
+                if(this.config == null)
                 {
                     return string.Empty;
                 }
@@ -182,6 +303,7 @@ namespace MusterApp.ViewModels
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the logging.
         /// </summary>
@@ -273,7 +395,9 @@ namespace MusterApp.ViewModels
         /// </summary>
         private void ExecuteOverview()
         {
-            this.IsOverviewVisible = !this.IsOverviewVisible;
+            this.IsConfigVisible = false;
+            this.IsInvoiceVisible = false;
+            this.IsOverviewVisible = true;
         }
     }
 }

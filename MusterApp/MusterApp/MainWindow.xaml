@@ -64,7 +64,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="20,0">
                     <telerik:RadButton Margin="5" Height="30" Width="100" Content="Overview" Command="{Binding OverviewButton}" ></telerik:RadButton>
                     <telerik:RadButton Margin="5" Height="30" Width="100" Content="Invoices" Command="{Binding OverviewButton}" ></telerik:RadButton>
-                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Other Stuff" Command="{Binding OverviewButton}" ></telerik:RadButton>
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Create Configuration" Command="{Binding OverviewButton}" ></telerik:RadButton>
                 </StackPanel>
             </Grid>
         </Grid>
@@ -114,6 +114,47 @@
                     </telerik:GridViewDataColumn>
                 </telerik:RadGridView.Columns>
             </telerik:RadGridView>
+        </Grid>
+        <Grid Grid.Row="1">
+           <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <StackPanel>
+                    <Label Content="Choose a Location:"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal">
+                    <telerik:RadComboBox x:Name="LocationSelector"
+                                         ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.location}"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="2">
+                <StackPanel>
+                    <Label Content="Choose a Device:"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Horizontal">  
+                    <telerik:RadComboBox x:Name="DeviceSelector"
+                                        ItemsSource="{Binding ElementName=LocationSelector, Path=SelectedItem.device}"/>
+                    <telerik:RadButton Content="Generate Config" Margin="20,0" 
+                                                   Command="{Binding Source={StaticResource ViewModel}, Path=GenerateConfigCommand}" 
+                                                   CommandParameter="{Binding ElementName=DeviceSelector, Path=SelectedItem}"
+                                                   />
+                </StackPanel>
+            </Grid>
         </Grid>
 
     </Grid>
