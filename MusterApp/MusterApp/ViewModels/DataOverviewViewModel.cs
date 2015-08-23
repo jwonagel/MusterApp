@@ -77,6 +77,9 @@ namespace MusterApp.ViewModels
         /// </summary>
         private string config;
 
+        private const string newLn = "\n";
+        private const string tab = "\t";
+
         private ICommand configButton;
 
         private ICommand invoiceButton;
@@ -219,9 +222,9 @@ namespace MusterApp.ViewModels
             foreach (var vlan in vlans)
             {
                 vlanConfig += "vlan " + vlan.id_vlan;
-                vlanConfig += "\n\t";
+                vlanConfig += newLn+tab;
                 vlanConfig += "name " + vlan.bezeichnung;
-                vlanConfig += "\n\n";
+                vlanConfig += newLn + newLn;
             }
 
             var nwifsConfig =string.Empty;
@@ -231,16 +234,35 @@ namespace MusterApp.ViewModels
                 foreach(var tempVlan in vlan)
                 {
                     nwifsConfig += "interface vlan " + tempVlan.bezeichnung;
-                    nwifsConfig += "\n\t";
-                    nwifsConfig +=  ""+ netzwerkif.name;
+                    nwifsConfig += newLn + tab;
+                    nwifsConfig +=  "nameif "+ netzwerkif.name;
+                    nwifsConfig += newLn + tab;
+                    nwifsConfig += "ip adress " + tempVlan.net_adress;
+                    nwifsConfig += "  " + tempVlan.subnetmask;
+                    nwifsConfig += newLn + tab;
+                    nwifsConfig += "ip default-gateway " + tempVlan.standart_gateway;
+                    nwifsConfig += newLn + newLn;
                 }
             }
 
             var credentials = device.administrativ_credentials_snmp_comunity.Select(a => a.administrativ_credentials);
-            var userName = credentials.Select(c => c.benutzer);
-            var pwd = credentials.Select(c => c.passwort);
+            string userConfig = string.Empty;
+            foreach(var credential in credentials)
+            {
+                userConfig += "user name " + credential.benutzer;
+                userConfig += newLn + tab;
+                userConfig += "privilege 10";
+                userConfig += newLn + tab;
+                userConfig += "password" + credential.passwort;
+            }
 
-            this.Config = "test \n test";
+            var location = device.location;
+            var pod = location.pod;
+
+            string podConfig = "timezone " + pod.zeitzone;
+            podConfig += newLn;
+
+            this.Config = vlanConfig + nwifsConfig + userConfig + podConfig;
         }
 
         /// <summary>
@@ -292,15 +314,7 @@ namespace MusterApp.ViewModels
 
             set
             {
-                if (value != null)
-                {
-                    this.config = value;
-                    var onPropertyChanged = this.PropertyChanged;
-                    if (onPropertyChanged != null)
-                    {
-                        onPropertyChanged(this, new PropertyChangedEventArgs("Config"));
-                    }
-                }
+                this.SetProperty(ref this.config, value, () => this.Config);
             }
         }
 
@@ -327,16 +341,10 @@ namespace MusterApp.ViewModels
 
             set
             {
-                if (value != null)
-                {
-                    this.logging = value;
-                    var onPropertyChanged = this.PropertyChanged;
-                    if (onPropertyChanged != null)
-                    {
-                        onPropertyChanged(this, new PropertyChangedEventArgs("Logging"));
-                    }
-                }
+                this.SetProperty(ref this.logging, value, () => this.Logging);
+
             }
+        
         }
 
         /// <summary>
@@ -362,15 +370,8 @@ namespace MusterApp.ViewModels
 
             set
             {
-                if (value != null)
-                {
-                    this.pods = value;
-                    var onPropertyChanged = this.PropertyChanged;
-                    if (onPropertyChanged != null)
-                    {
-                        onPropertyChanged(this, new PropertyChangedEventArgs("Pods"));
-                    }
-                }
+                this.SetProperty(ref this.pods, value, () => this.Pods);
+
             }
         }
 
