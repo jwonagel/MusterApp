@@ -50,6 +50,7 @@ namespace MusterApp.ViewModels
 
         private ICommand invoiceCommand;
         private ICommand generateConfigCommand;
+        private string config;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataOverviewViewModel"/> class.
@@ -112,7 +113,17 @@ namespace MusterApp.ViewModels
             {
                 return;
             }
+            var netzwerkInterface = device.netzwerkinterface.ToList();
+            var vlan = device.netzwerkinterface.Select(v => v.vlan);
+            var vlanNames = vlan.Select(v => v.Select(x => x.bezeichnung));
+
             
+
+            var credentials = device.administrativ_credentials_snmp_comunity.Select(a => a.administrativ_credentials);
+            var userName = credentials.Select(c => c.benutzer);
+            var pwd = credentials.Select(c => c.passwort);
+
+            this.Config = "test \n test";
         }
 
         private void ExecuteInvoice(object obj)
@@ -120,6 +131,30 @@ namespace MusterApp.ViewModels
             throw new NotImplementedException();
         }
 
+        public string Config
+        {
+            get
+            {
+                if(config == null)
+                {
+                    return string.Empty;
+                }
+                return this.config;
+            }
+
+            set
+            {
+                if (value != null)
+                {
+                    this.config = value;
+                    var onPropertyChanged = this.PropertyChanged;
+                    if (onPropertyChanged != null)
+                    {
+                        onPropertyChanged(this, new PropertyChangedEventArgs("Config"));
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Gets or sets the logging.
         /// </summary>
