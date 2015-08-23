@@ -114,10 +114,37 @@ namespace MusterApp.ViewModels
                 return;
             }
             var netzwerkInterface = device.netzwerkinterface.ToList();
-            var vlan = device.netzwerkinterface.Select(v => v.vlan);
-            var vlanNames = vlan.Select(v => v.Select(x => x.bezeichnung));
+            var vlansList = device.netzwerkinterface.Select(v => v.vlan);
+            var vlans = new List<vlan>();
+            foreach (var vilan in vlansList)
+            {
+                foreach(var vlan in vilan)
+                {
+                    vlans.Add(vlan);
+                }
+            }
+            string vlanConfig = string.Empty;
+            foreach(var vlan in vlans)
+            {
+                vlanConfig += "vlan " + vlan.id_vlan;
+                vlanConfig += "\n\t";
+                vlanConfig += "name " + vlan.bezeichnung;
+                vlanConfig += "\n\n";
+            }
 
-            
+
+            string nwifsConfig =string.Empty;
+            foreach (var netzwerkif in netzwerkInterface)
+            {
+                var vlan = netzwerkif.vlan;
+                foreach(var tempVlan in vlan)
+                {
+                    nwifsConfig += "interface vlan " + tempVlan.bezeichnung;
+                    nwifsConfig += "\n\t";
+                    nwifsConfig +=  ""+ netzwerkif.name;
+                }
+                
+            }
 
             var credentials = device.administrativ_credentials_snmp_comunity.Select(a => a.administrativ_credentials);
             var userName = credentials.Select(c => c.benutzer);
