@@ -17,6 +17,8 @@ namespace MusterApp
 {
     using System.Collections.ObjectModel;
 
+    using Microsoft.Win32;
+
     using MusterApp.ViewModels;
 
     using Telerik.Windows.Controls;
@@ -39,7 +41,25 @@ namespace MusterApp
             this.InitializeComponent();
         }
 
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            // Displays a SaveFileDialog so the user can save the Image
+            // assigned to Button2.
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = " Textfile |*.txt";
+            saveFileDialog1.Title = "Save Config File";
+            saveFileDialog1.ShowDialog();
 
-     
+            // If the file name is not an empty string open it for saving.
+            if (saveFileDialog1.FileName != "")
+            {
+
+
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, this.TextBox.Text);
+                MessageBox.Show("File succesfully saved!", "Config File", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+        }
     }
 }

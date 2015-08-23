@@ -159,7 +159,11 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
-                <TextBox Text="{Binding Config}"/>
+                <TextBox Name="TextBox" Text="{Binding Config}"/>
+            </Grid>
+            
+            <Grid Grid.Column="0" Grid.Row="5">
+                <telerik:RadButton Content="Save Config" Click="ButtonBase_OnClick"></telerik:RadButton>
             </Grid>
         </Grid>
 
