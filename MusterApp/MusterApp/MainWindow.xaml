@@ -63,14 +63,14 @@
             <Grid Grid.Column="2" Grid.ColumnSpan="3">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="20,0">
                     <telerik:RadButton Margin="5" Height="30" Width="100" Content="Overview" Command="{Binding OverviewButton}" ></telerik:RadButton>
-                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Invoices" Command="{Binding OverviewButton}" ></telerik:RadButton>
-                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Create Configuration" Command="{Binding OverviewButton}" ></telerik:RadButton>
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Invoices" Command="{Binding InvoiceButton}" ></telerik:RadButton>
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Create Configuration" Command="{Binding ConfigButton}" ></telerik:RadButton>
                 </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" >
             <telerik:RadGridView  
-                Visibility="{Binding IsOverviewVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Visibility="{Binding IsInvoiceVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.abrechnung}"
                 AutoGenerateColumns="False"
                 >
@@ -115,7 +115,8 @@
                 </telerik:RadGridView.Columns>
             </telerik:RadGridView>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" 
+               Visibility="{Binding IsConfigVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -136,8 +137,9 @@
             </Grid>
             <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal">
-                    <telerik:RadComboBox x:Name="LocationSelector"
-                                         ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.location}"/>
+                    <telerik:RadComboBox x:Name="LocationSelector" DisplayMemberPath="location_name"
+                                         ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.location}"
+                                         />
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="0" Grid.Row="2">
@@ -148,12 +150,16 @@
             <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal">  
                     <telerik:RadComboBox x:Name="DeviceSelector"
+                                         DisplayMemberPath="hostname"
                                         ItemsSource="{Binding ElementName=LocationSelector, Path=SelectedItem.device}"/>
                     <telerik:RadButton Content="Generate Config" Margin="20,0" 
                                                    Command="{Binding Source={StaticResource ViewModel}, Path=GenerateConfigCommand}" 
                                                    CommandParameter="{Binding ElementName=DeviceSelector, Path=SelectedItem}"
                                                    />
                 </StackPanel>
+            </Grid>
+            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                <TextBox Text="{Binding Config}"/>
             </Grid>
         </Grid>
 
