@@ -15,14 +15,31 @@ using System.Windows.Shapes;
 
 namespace MusterApp
 {
+    using System.Collections.ObjectModel;
+
+    using MusterApp.ViewModels;
+
+    using Telerik.Windows.Controls;
+
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// The shell.
+        /// </summary>
+        private Shell shell;
+
+        private DataOverviewViewModel overviewViewModel;
+
         public MainWindow()
         {
-            InitializeComponent();
+            StyleManager.ApplicationTheme = new Windows8Theme();
+            this.InitializeComponent();
         }
+
+
+     
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="86cefae1455f4863a505cd9b54ebc8e6" Name="Diagram1">
+        <EntityTypeShape EntityType="MusterModel.abrechnung" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.administrativ_credentials" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.administrativ_credentials_snmp_comunity" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.adresse" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.device" Width="1.5" PointX="10.5" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.device_typ" Width="1.5" PointX="8.25" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.geraetebezeichnung" Width="1.5" PointX="6" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.geraetetyp" Width="1.5" PointX="6" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.hersteller" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.kunde" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.lieferant" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.location" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.logging" Width="1.5" PointX="12.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.netzwerkinterface" Width="1.5" PointX="12.75" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.person" Width="1.5" PointX="6" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.pod" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.position_abrechnung" Width="1.5" PointX="12.75" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.snmp_comunity" Width="1.5" PointX="6" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.vlan" Width="1.5" PointX="15" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.zahlung" Width="1.5" PointX="10.5" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MusterModel.pod_person" Width="1.5" PointX="8.25" PointY="14.875" IsExpanded="true" />
+        <AssociationConnector Association="MusterModel.abrechnung_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.abrechnung_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.position_abrechnung_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.administrativ_credentials_snmp_comunity_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.administrativ_credentials_snmp_comunity_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.lieferant_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.location_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.logging_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.netzwerkinterface_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.position_abrechnung_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_typ_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_typ_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_typ_ibfk_3" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.pod_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.zahlung_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.location_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.position_abrechnung_ibfk_4" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.vlan_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.netzwerkinterface_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.position_abrechnung_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.pod_person_ibfk_2" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.pod_person_ibfk_1" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.abrechnung_zahlung" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.device_administrave_credentials_snmpcomunity" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.hersteller_lieferant" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.kunde_adresse" ManuallyRouted="false" />
+        <AssociationConnector Association="MusterModel.netzwerkinterface_vlan" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

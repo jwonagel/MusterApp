@@ -3,10 +3,118 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MusterApp"
+        xmlns:viewModels="clr-namespace:MusterApp.ViewModels"
+        xmlns:converters="clr-namespace:MusterApp.Converters"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:musterApp="clr-namespace:MusterApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="MainWindow" Height="600" Width="800" 
+        >
+    <Window.Resources>
+        <viewModels:DataOverviewViewModel x:Key="ViewModel"/>
+        <converters:BooleanToVisibilityExtendedConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InvoiceVisibilityConverter x:Key="InvoiceVisibilityConverter"></converters:InvoiceVisibilityConverter>
+       
+            <DataTemplate x:Key="ComboBoxTemplate">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Pod ID: "/>
+                    <TextBlock Text="{Binding id_pod}"/>
+                    <TextBlock Text=" - "/>
+                    <TextBlock Text="Kunde: "/>
+                    <TextBlock Text="{Binding kunde.name}"></TextBlock>
+                </StackPanel>
+            </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource ViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Grid.ColumnSpan="2">
+                <telerik:RadComboBox x:Name="SelectedPod" ItemsSource="{Binding Pods}" 
+                                     
+                                    ClearSelectionButtonContent="True"
+                                    CanAutocompleteSelectItems="True"
+                                    IsEditable="True"
+                                    OpenDropDownOnFocus="True"
+                                    Height="30"
+                                    Width="200"
+                                    EmptyText="Please select POD"
+                                    ItemTemplate="{StaticResource ComboBoxTemplate}"
+                                    telerik:TextSearch.TextPath="id_pod"
+                                    >
+                    
+               
+                </telerik:RadComboBox>
+            </Grid>
+            <Grid Grid.Column="2" Grid.ColumnSpan="3">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="20,0">
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Overview" Command="{Binding OverviewButton}" ></telerik:RadButton>
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Invoices" Command="{Binding OverviewButton}" ></telerik:RadButton>
+                    <telerik:RadButton Margin="5" Height="30" Width="100" Content="Other Stuff" Command="{Binding OverviewButton}" ></telerik:RadButton>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" >
+            <telerik:RadGridView  
+                Visibility="{Binding IsOverviewVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.abrechnung}"
+                AutoGenerateColumns="False"
+                >
+               <telerik:RadGridView.ChildTableDefinitions>
+                    <telerik:GridViewTableDefinition>
+
+                    </telerik:GridViewTableDefinition>
+                </telerik:RadGridView.ChildTableDefinitions>
+                <telerik:RadGridView.HierarchyChildTemplate>
+                    <DataTemplate>
+                        <telerik:RadGridView AutoGenerateColumns="False" ItemsSource="{Binding position_abrechnung}">
+                            <telerik:RadGridView.Columns>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding id_position}"/>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding name}"/>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding preis}"/>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding device.hostname}"/>
+                                <telerik:GridViewDataColumn DataMemberBinding="{Binding netzwerkinterface.name}"/>
+                            </telerik:RadGridView.Columns>
+                        </telerik:RadGridView>
+                    </DataTemplate>
+                </telerik:RadGridView.HierarchyChildTemplate>
+                
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding id_abrechnung}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding referenz}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.ort}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.plz}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.strasse}"/>
+                    <telerik:GridViewDataColumn DataMemberBinding="{Binding fakturierungsdatum}"/>
+                    <telerik:GridViewDataColumn IsReadOnly="True">
+                        <telerik:GridViewDataColumn.CellTemplate>
+                            <DataTemplate>
+                                <telerik:RadButton Content="Invoice" 
+                                                   Command="{Binding Source={StaticResource ViewModel}, Path=InvoiceCommand}" 
+                                                   CommandParameter="{Binding}"
+                                                   IsEnabled="{Binding Path=., Converter={StaticResource InvoiceVisibilityConverter}}"
+                                                   />
+                            </DataTemplate>
+                        </telerik:GridViewDataColumn.CellTemplate>
+                       
+                    </telerik:GridViewDataColumn>
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+        </Grid>
+
     </Grid>
 </Window>
