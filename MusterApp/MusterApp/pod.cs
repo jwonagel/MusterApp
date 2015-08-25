@@ -24,6 +24,10 @@ namespace MusterApp
         public int id_pod { get; set; }
         public string zeitzone { get; set; }
         public int id_kunde { get; set; }
+        public string name { get; set; }
+        public string domain { get; set; }
+        public string nameserver { get; set; }
+        public string SNTP_ADDRESS { get; set; }
     
         public virtual ICollection<abrechnung> abrechnung { get; set; }
         public virtual kunde kunde { get; set; }

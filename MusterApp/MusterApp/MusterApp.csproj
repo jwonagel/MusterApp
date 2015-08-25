@@ -334,6 +334,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InvoiceVisibilityConverter.cs" />
+    <Compile Include="Converters\StatisticsConverter.cs" />
     <Compile Include="DBConnector.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -367,6 +368,7 @@
       <DependentUpon>DBConnector.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\InvoiceModel.cs" />
+    <Compile Include="Models\Params.cs" />
     <Compile Include="netzwerkinterface.cs">
       <DependentUpon>DBConnector.tt</DependentUpon>
     </Compile>

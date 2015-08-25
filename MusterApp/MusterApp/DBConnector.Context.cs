@@ -46,6 +46,5 @@ namespace MusterApp
         public virtual DbSet<vlan> vlan { get; set; }
         public virtual DbSet<zahlung> zahlung { get; set; }
         public virtual DbSet<pod_person> pod_person { get; set; }
-
     }
 }
