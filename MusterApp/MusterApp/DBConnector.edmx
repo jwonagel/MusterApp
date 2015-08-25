@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MusterModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MusterModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="abrechnung">
           <Key>
             <PropertyRef Name="id_abrechnung" />
@@ -15,8 +15,8 @@
           <Property Name="adresse_id_adresse" Type="int" Nullable="false" />
           <Property Name="fakturierungsdatum" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.abrechnung_zahlung' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.abrechnung_zahlung' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="abrechnung_zahlung">
           <Key>
             <PropertyRef Name="abrechnung_id_abrechnung" />
@@ -63,8 +63,8 @@ warning 6002: The table/view 'def.muster.abrechnung_zahlung' does not have a pri
           <Property Name="device_typ_id_devicetyp" Type="int" Nullable="false" />
           <Property Name="isActive" Type="tinyint" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.device_administrave_credentials_snmpcomunity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.device_administrave_credentials_snmpcomunity' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="device_administrave_credentials_snmpcomunity">
           <Key>
             <PropertyRef Name="device_id_device" />
@@ -106,8 +106,8 @@ warning 6002: The table/view 'def.muster.device_administrave_credentials_snmpcom
           <Property Name="id_hersteller" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.hersteller_lieferant' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.hersteller_lieferant' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="hersteller_lieferant">
           <Key>
             <PropertyRef Name="hersteller_id_hersteller" />
@@ -123,8 +123,8 @@ warning 6002: The table/view 'def.muster.hersteller_lieferant' does not have a p
           <Property Name="id_kunde" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.kunde_adresse' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.kunde_adresse' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="kunde_adresse">
           <Key>
             <PropertyRef Name="id_kunde" />
@@ -176,8 +176,8 @@ warning 6002: The table/view 'def.muster.kunde_adresse' does not have a primary 
           <Property Name="Medium" Type="varchar" MaxLength="45" />
           <Property Name="Portnummer" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.netzwerkinterface_vlan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.netzwerkinterface_vlan' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="netzwerkinterface_vlan">
           <Key>
             <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
@@ -203,9 +203,13 @@ warning 6002: The table/view 'def.muster.netzwerkinterface_vlan' does not have a
           <Property Name="id_pod" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="zeitzone" Type="varchar" MaxLength="45" />
           <Property Name="id_kunde" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="46" />
+          <Property Name="domain" Type="varchar" MaxLength="45" />
+          <Property Name="nameserver" Type="varchar" MaxLength="45" />
+          <Property Name="SNTP_ADDRESS" Type="varchar" MaxLength="45" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.pod_person' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.pod_person' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="pod_person">
           <Key>
             <PropertyRef Name="pod_id_pod" />
@@ -255,19 +259,6 @@ warning 6002: The table/view 'def.muster.pod_person' does not have a primary key
           <Property Name="betrag" Type="decimal" Precision="4" Scale="0" />
           <Property Name="zahlungsdatum" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'def.muster.v_DeviceCatalog' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="v_DeviceCatalog">
-          <Property Name="Device_id" Type="int" />
-          <Property Name="Hersteller" Type="varchar" MaxLength="45" />
-          <Property Name="Geraetetyp" Type="varchar" MaxLength="45" />
-          <Property Name="Geraetebezeichnung" Type="varchar" MaxLength="45" />
-          <Property Name="Portnummer" Type="int" />
-          <Property Name="Fullduplex" Type="bool" />
-          <Property Name="Bandbreite_Mbits" Type="int" />
-          <Property Name="Medium" Type="varchar" MaxLength="45" />
-          <Property Name="Preis" Type="decimal" Precision="4" Scale="0" />
-        </EntityType>-->
         <Association Name="abrechnung_ibfk_1">
           <End Role="pod" Type="Self.pod" Multiplicity="1" />
           <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
@@ -871,8 +862,7 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
             <End Role="zahlung" EntitySet="zahlung" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MusterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1071,6 +1061,10 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
           <NavigationProperty Name="kunde" Relationship="Self.pod_ibfk_1" FromRole="pod" ToRole="kunde" />
           <NavigationProperty Name="location" Relationship="Self.location_ibfk_2" FromRole="pod" ToRole="location" />
           <NavigationProperty Name="pod_person" Relationship="Self.pod_person_ibfk_1" FromRole="pod" ToRole="pod_person" />
+          <Property Name="name" Type="String" MaxLength="46" FixedLength="false" Unicode="false" />
+          <Property Name="domain" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="nameserver" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="SNTP_ADDRESS" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="position_abrechnung">
           <Key>
@@ -1744,6 +1738,10 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
           <EntitySetMapping Name="pod">
             <EntityTypeMapping TypeName="MusterModel.pod">
               <MappingFragment StoreEntitySet="pod">
+                <ScalarProperty Name="SNTP_ADDRESS" ColumnName="SNTP_ADDRESS" />
+                <ScalarProperty Name="nameserver" ColumnName="nameserver" />
+                <ScalarProperty Name="domain" ColumnName="domain" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id_pod" ColumnName="id_pod" />
                 <ScalarProperty Name="zeitzone" ColumnName="zeitzone" />
                 <ScalarProperty Name="id_kunde" ColumnName="id_kunde" />
