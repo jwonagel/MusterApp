@@ -15,8 +15,8 @@
           <Property Name="adresse_id_adresse" Type="int" Nullable="false" />
           <Property Name="fakturierungsdatum" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.abrechnung_zahlung' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.abrechnung_zahlung' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="abrechnung_zahlung">
           <Key>
             <PropertyRef Name="abrechnung_id_abrechnung" />
@@ -63,8 +63,8 @@ warning 6002: The table/view 'def.muster.abrechnung_zahlung' does not have a pri
           <Property Name="device_typ_id_devicetyp" Type="int" Nullable="false" />
           <Property Name="isActive" Type="tinyint" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.device_administrave_credentials_snmpcomunity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.device_administrave_credentials_snmpcomunity' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="device_administrave_credentials_snmpcomunity">
           <Key>
             <PropertyRef Name="device_id_device" />
@@ -106,8 +106,8 @@ warning 6002: The table/view 'def.muster.device_administrave_credentials_snmpcom
           <Property Name="id_hersteller" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.hersteller_lieferant' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.hersteller_lieferant' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="hersteller_lieferant">
           <Key>
             <PropertyRef Name="hersteller_id_hersteller" />
@@ -123,8 +123,8 @@ warning 6002: The table/view 'def.muster.hersteller_lieferant' does not have a p
           <Property Name="id_kunde" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.kunde_adresse' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.kunde_adresse' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="kunde_adresse">
           <Key>
             <PropertyRef Name="id_kunde" />
@@ -176,8 +176,8 @@ warning 6002: The table/view 'def.muster.kunde_adresse' does not have a primary 
           <Property Name="Medium" Type="varchar" MaxLength="45" />
           <Property Name="Portnummer" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.netzwerkinterface_vlan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.netzwerkinterface_vlan' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="netzwerkinterface_vlan">
           <Key>
             <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
@@ -208,8 +208,8 @@ warning 6002: The table/view 'def.muster.netzwerkinterface_vlan' does not have a
           <Property Name="nameserver" Type="varchar" MaxLength="45" />
           <Property Name="SNTP_ADDRESS" Type="varchar" MaxLength="45" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'def.muster.pod_person' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.pod_person' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
         <EntityType Name="pod_person">
           <Key>
             <PropertyRef Name="pod_id_pod" />

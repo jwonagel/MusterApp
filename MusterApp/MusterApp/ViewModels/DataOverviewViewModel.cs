@@ -93,6 +93,7 @@ namespace MusterApp.ViewModels
         public DataOverviewViewModel()
         {
             this.context = new MusterContext();
+<<<<<<< HEAD
         }
 
         /// <summary>
@@ -133,6 +134,8 @@ namespace MusterApp.ViewModels
                 this.ObsoleteValue = sum;
                 this.SetProperty(ref this.selectedPod, value, () => this.SelectedPod);
             }
+=======
+>>>>>>> origin/master
         }
 
         /// <summary>
@@ -342,14 +345,22 @@ namespace MusterApp.ViewModels
                 userConfig += newLn + tab;
                 userConfig += "privilege 10";
                 userConfig += newLn + tab;
-                userConfig += "password" + credential.passwort;
+                userConfig += "password " + credential.passwort;
+                userConfig += newLn + newLn;
             }
 
             var location = device.location;
             var pod = location.pod;
 
-            string podConfig = "timezone " + pod.zeitzone;
+            string podConfig = "ip domain-name " + pod.domain;
             podConfig += newLn;
+            podConfig += "ip name-server" + pod.nameserver;
+            podConfig += newLn;
+            podConfig += "clock timezone " + pod.zeitzone;
+            podConfig += newLn;
+            podConfig += "sntp server " + pod.SNTP_ADDRESS;
+
+
 
             this.Config = vlanConfig + nwifsConfig + userConfig + podConfig;
 
@@ -470,9 +481,16 @@ namespace MusterApp.ViewModels
                 //    this.logging = new ObservableCollection<logging>(query);
                 //    return this.logging;
                 //}
-                var query = this.context.pod.ToList();
-                this.pods = new ObservableCollection<pod>(query);
-                return this.pods;
+                try {
+                    var query = this.context.pod.ToList();
+                    this.pods = new ObservableCollection<pod>(query);
+                    return this.pods;
+                }
+                catch
+                {
+                    return null;
+                }
+                    
             }
 
             set
