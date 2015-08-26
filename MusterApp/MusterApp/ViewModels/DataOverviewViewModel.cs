@@ -10,6 +10,7 @@ namespace MusterApp.ViewModels
     using System.ComponentModel;
     using System.Data.Entity;
     using System.Runtime.CompilerServices;
+    using System.Security.AccessControl;
     using System.Windows.Input;
 
     using MusterApp.Annotations;
@@ -55,7 +56,7 @@ namespace MusterApp.ViewModels
         /// <summary>
         /// The context.
         /// </summary>
-        private MusterDbContext context;
+        private MusterContext context;
 
         /// <summary>
         /// The pods.
@@ -84,12 +85,54 @@ namespace MusterApp.ViewModels
 
         private ICommand invoiceButton;
 
+        private pod selectedPod;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataOverviewViewModel"/> class.
         /// </summary>
         public DataOverviewViewModel()
         {
-            this.context = new MusterDbContext();
+            this.context = new MusterContext();
+        }
+
+        /// <summary>
+        /// The obsolete value.
+        /// </summary>
+        private string obsoleteValue;
+
+        /// <summary>
+        /// Gets or sets the obsolete value.
+        /// </summary>
+        public string ObsoleteValue
+        {
+            get
+            {
+                return this.obsoleteValue;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.obsoleteValue, value, () => this.ObsoleteValue);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the selected pod.
+        /// </summary>
+        public pod SelectedPod
+        {
+            get
+            {
+                return this.selectedPod;
+            }
+
+            set
+            {
+                var sum = this.CalculateObsoleteValue(value);
+                this.ObsoleteValue = sum;
+                this.SetProperty(ref this.selectedPod, value, () => this.SelectedPod);
+            }
         }
 
         /// <summary>
@@ -193,18 +236,64 @@ namespace MusterApp.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Gets the generate config command.
+        /// </summary>
+        public ICommand ExecutePodBillCommand
+        {
+            get
+            {
+                return this.podBillCommand ?? (this.podBillCommand = new RelayCommand(this.ExecutePodBill));
+            }
+        }
+
+        private void ExecuteGenerateConfig(object obj)
+        {
+            this.IsBusy = true;
+            var ok = Task.Run(() => this.GenerateConfigAsync(obj));
+
+
+        }
+
+        /// <summary>
+        /// The calculate obsolete value.
+        /// </summary>
+        /// <param name="choosedPod">
+        /// The choosed pod.
+        /// </param>
+        public string CalculateObsoleteValue(pod choosedPod)
+        {
+            if (choosedPod == null)
+            {
+                return string.Empty;
+            }
+
+            var obsolete = choosedPod.location;
+
+            var value = string.Empty + (from location in obsolete
+                                                 from position in location.position_abrechnung
+                                                 where position.abrechnung == null
+                                                 select (int)position.preis).Sum();
+            return value;
+        }
+
         /// <summary>
         /// The execute generate config.
         /// </summary>
         /// <param name="obj">
         /// The obj.
         /// </param>
-        private void ExecuteGenerateConfig(object obj)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private async Task<bool> GenerateConfigAsync(object obj)
         {
+            this.IsBusy = true;
             var device = obj as device;
             if (device == null)
             {
-                return;
+                return false;
             }
 
             var netzwerkInterface = device.netzwerkinterface.ToList();
@@ -263,6 +352,9 @@ namespace MusterApp.ViewModels
             podConfig += newLn;
 
             this.Config = vlanConfig + nwifsConfig + userConfig + podConfig;
+
+            this.IsBusy = false;
+            return true;
         }
 
         /// <summary>
@@ -286,6 +378,21 @@ namespace MusterApp.ViewModels
             this.IsConfigVisible = false;
             this.IsInvoiceVisible = true;
             this.IsOverviewVisible = false;
+        }
+
+        /// <summary>
+        /// The execute invoice view.
+        /// </summary>
+        private void ExecutePodBill()
+        {
+            if (this.SelectedPod == null)
+            {
+                return;
+            }
+
+           var result = this.context.Database.ExecuteSqlCommand("CALL PodBill({0})", this.SelectedPod.id_pod);
+           this.context.pod.Load();
+           this.ObsoleteValue = this.CalculateObsoleteValue(this.SelectedPod);
         }
 
         /// <summary>
@@ -372,6 +479,23 @@ namespace MusterApp.ViewModels
             {
                 this.SetProperty(ref this.pods, value, () => this.Pods);
 
+            }
+        }
+
+        private bool isBusy;
+
+        private ICommand podBillCommand;
+
+        public bool IsBusy
+        {
+            get
+            {
+                return this.isBusy;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.isBusy, value, () => this.IsBusy);
             }
         }
 

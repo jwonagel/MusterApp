@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="86cefae1455f4863a505cd9b54ebc8e6" Name="Diagram1">
+      <Diagram DiagramId="86cefae1455f4863a505cd9b54ebc8e6" Name="Diagram1" ZoomLevel="47">
         <EntityTypeShape EntityType="MusterModel.abrechnung" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="MusterModel.administrativ_credentials" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="MusterModel.administrativ_credentials_snmp_comunity" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />

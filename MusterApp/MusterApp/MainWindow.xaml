@@ -67,6 +67,7 @@
                                     EmptyText="Please select POD"
                                     ItemTemplate="{StaticResource ComboBoxTemplate}"
                                     telerik:TextSearch.TextPath="id_pod"
+                                    SelectedValue="{Binding SelectedPod}"
                                     />
             </Grid>
             <Grid Grid.Column="1" Grid.Row="0">
@@ -150,83 +151,92 @@
         <Grid Grid.Row="1"
               Margin="20"
                Visibility="{Binding IsConfigVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <StackPanel>
+                            <Label Content="Choose a Location:"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                        <StackPanel Orientation="Horizontal">
+                            <telerik:RadComboBox x:Name="LocationSelector" DisplayMemberPath="location_name"
+                                         Width="200"
+                                         Height="30"
+                                         ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.location}"
+                                         />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="2">
+                        <StackPanel>
+                            <Label Content="Choose a Device:"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+                        <StackPanel Orientation="Horizontal">
+                            <telerik:RadComboBox x:Name="DeviceSelector"
+                                         Width="200"
+                                         Height="30"
+                                         DisplayMemberPath="hostname"
+                                        ItemsSource="{Binding ElementName=LocationSelector, Path=SelectedItem.device}"/>
+                            <telerik:RadButton Content="Generate Config" Margin="20,0" 
+                                                   Command="{Binding Source={StaticResource ViewModel}, Path=GenerateConfigCommand}" 
+                                                   CommandParameter="{Binding ElementName=DeviceSelector, Path=SelectedItem}"
+                                                   />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0,20">
+                        <TextBox Name="TextBox" Text="{Binding Config}"/>
+                    </Grid>
+
+                    <Grid Grid.Column="0" Grid.Row="5">
+                        <telerik:RadButton Content="Save Config" Click="ButtonBase_OnClick"/>
+                    </Grid>
+                </Grid>
+            </telerik:RadBusyIndicator>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="0"
+              Visibility="{Binding IsOverviewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid>
-                <StackPanel>
-                    <Label Content="Choose a Location:"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Horizontal">
-                    <telerik:RadComboBox x:Name="LocationSelector" DisplayMemberPath="location_name"
-                                         Width="200"
-                                         Height="30"
-                                         ItemsSource="{Binding ElementName=SelectedPod, Path=SelectedItem.location}"
-                                         />
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Column="0" Grid.Row="2">
-                <StackPanel>
-                    <Label Content="Choose a Device:"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Horizontal">
-                    <telerik:RadComboBox x:Name="DeviceSelector"
-                                         Width="200"
-                                         Height="30"
-                                         DisplayMemberPath="hostname"
-                                        ItemsSource="{Binding ElementName=LocationSelector, Path=SelectedItem.device}"/>
-                    <telerik:RadButton Content="Generate Config" Margin="20,0" 
-                                                   Command="{Binding Source={StaticResource ViewModel}, Path=GenerateConfigCommand}" 
-                                                   CommandParameter="{Binding ElementName=DeviceSelector, Path=SelectedItem}"
-                                                   />
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="0,20">
-                <TextBox Name="TextBox" Text="{Binding Config}"/>
-            </Grid>
 
-            <Grid Grid.Column="0" Grid.Row="5">
-                <telerik:RadButton Content="Save Config" Click="ButtonBase_OnClick"/>
-            </Grid>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="0">
-            
-           <Grid.ColumnDefinitions>
-               <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions> 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
             <Grid>
                 <StackPanel Margin="20,0,0,0">
-                <TextBlock Style="{StaticResource overviewLabelStyle}" 
+                    <TextBlock Style="{StaticResource overviewLabelStyle}" 
                            Text="Obsolete Value in Pod:"/>
-                    <TextBlock Text="{Binding ElementName=SelectedPod,
+                    <!--<TextBlock Text="{Binding ElementName=SelectedPod,
                         Path=SelectedItem,
                         Converter={StaticResource StatisticsConverter}, ConverterParameter={x:Static models:Params.Obsolete}}" 
-                               Style="{StaticResource  overviewValueStyle}"/>
+                               Style="{StaticResource  overviewValueStyle}"/>-->
+                    <TextBlock Style="{StaticResource overviewValueStyle}"
+                               Text="{Binding ObsoleteValue}" ></TextBlock>
+                    <telerik:RadButton Command="{Binding ExecutePodBillCommand}"
+                                       Content="PodBill"></telerik:RadButton>
                 </StackPanel>
             </Grid>
-            
+
         </Grid>
 
     </Grid>

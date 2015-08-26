@@ -12,11 +12,13 @@ namespace MusterApp
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
-    public partial class MusterDbContext : DbContext
+    public partial class MusterContext : DbContext
     {
-        public MusterDbContext()
-            : base("name=DbContext")
+        public MusterContext()
+            : base("name=MusterContext")
         {
         }
     
@@ -46,5 +48,14 @@ namespace MusterApp
         public virtual DbSet<vlan> vlan { get; set; }
         public virtual DbSet<zahlung> zahlung { get; set; }
         public virtual DbSet<pod_person> pod_person { get; set; }
+    
+        public virtual int LogClear(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("id", id) :
+                new ObjectParameter("id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("LogClear", idParameter);
+        }
     }
 }

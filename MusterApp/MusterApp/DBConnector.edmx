@@ -667,6 +667,9 @@ warning 6002: The table/view 'def.muster.pod_person' does not have a primary key
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="LogClear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="muster">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="MusterModelStoreContainer">
           <EntitySet Name="abrechnung" EntityType="Self.abrechnung" Schema="muster" store:Type="Tables" />
           <EntitySet Name="administrativ_credentials" EntityType="Self.administrativ_credentials" Schema="muster" store:Type="Tables" />
@@ -889,7 +892,7 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
           <Property Name="passwort" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="administrativ_credentials_snmp_comunity" Relationship="Self.administrativ_credentials_snmp_comunity_ibfk_1" FromRole="administrativ_credentials" ToRole="administrativ_credentials_snmp_comunity" />
         </EntityType>
-        <EntityType Name="administrativ_credentials_snmp_comunity">
+        <EntityType Name="administrativ_credentials_snmp_comunity" Abstract="false">
           <Key>
             <PropertyRef Name="id_administrativ_credentials" />
           </Key>
@@ -1434,7 +1437,7 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
           <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="*" />
           <End Role="vlan" Type="Self.vlan" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="DbContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="MusterContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="abrechnung" EntityType="Self.abrechnung" />
           <EntitySet Name="administrativ_credentials" EntityType="Self.administrativ_credentials" />
           <EntitySet Name="administrativ_credentials_snmp_comunity" EntityType="Self.administrativ_credentials_snmp_comunity" />
@@ -1572,13 +1575,16 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
             <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
             <End Role="vlan" EntitySet="vlan" />
           </AssociationSet>
+          <FunctionImport Name="LogClear">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MusterModelStoreContainer" CdmEntityContainer="DbContext">
+        <EntityContainerMapping StorageEntityContainer="MusterModelStoreContainer" CdmEntityContainer="MusterContext">
           <EntitySetMapping Name="abrechnung">
             <EntityTypeMapping TypeName="MusterModel.abrechnung">
               <MappingFragment StoreEntitySet="abrechnung">
@@ -1840,6 +1846,7 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
               <ScalarProperty Name="id_vlan" ColumnName="vlan_id_vlan" />
             </EndProperty>
           </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="LogClear" FunctionName="MusterModel.Store.LogClear" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1853,7 +1860,7 @@ FROM `pod_person` AS `pod_person`</DefiningQuery>
     </Connection>
     <Options>
       <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="ValidateOnBuild" Value="True" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
