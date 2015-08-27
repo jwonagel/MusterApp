@@ -93,7 +93,7 @@ namespace MusterApp.ViewModels
         public DataOverviewViewModel()
         {
             this.context = new MusterContext();
-<<<<<<< HEAD
+
         }
 
         /// <summary>
@@ -134,8 +134,7 @@ namespace MusterApp.ViewModels
                 this.ObsoleteValue = sum;
                 this.SetProperty(ref this.selectedPod, value, () => this.SelectedPod);
             }
-=======
->>>>>>> origin/master
+
         }
 
         /// <summary>
