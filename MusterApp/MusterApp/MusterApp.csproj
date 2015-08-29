@@ -454,6 +454,7 @@
     </None>
     <None Include="DBConnector.edmx.diagram">
       <DependentUpon>DBConnector.edmx</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="DBConnector.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -11,7 +11,10 @@ namespace MusterApp.ViewModels
     using System.Data.Entity;
     using System.Runtime.CompilerServices;
     using System.Security.AccessControl;
+    using System.Windows;
     using System.Windows.Input;
+
+    using Microsoft.Practices.ObjectBuilder2;
 
     using MusterApp.Annotations;
     using MusterApp.Models;
@@ -63,6 +66,8 @@ namespace MusterApp.ViewModels
         /// </summary>
         private ObservableCollection<pod> pods;
 
+        private ObservableCollection<abrechnung> abrechnungen;
+
         /// <summary>
         /// The invoice command.
         /// </summary>
@@ -92,7 +97,25 @@ namespace MusterApp.ViewModels
         /// </summary>
         public DataOverviewViewModel()
         {
-            this.context = new MusterContext();
+             this.LoadEntities();
+        }
+
+        /// <summary>
+        /// The load entities.
+        /// </summary>
+        private void LoadEntities()
+        {
+            if (this.context != null)
+            {
+                this.context.Dispose();
+            }
+
+                this.context = new MusterContext();
+                var query = this.context.pod.ToList();
+            if (this.Pods == null)
+            {
+                this.Pods = new ObservableCollection<pod>(query);
+            }
 
         }
 
@@ -130,11 +153,38 @@ namespace MusterApp.ViewModels
 
             set
             {
-                var sum = this.CalculateObsoleteValue(value);
-                this.ObsoleteValue = sum;
-                this.SetProperty(ref this.selectedPod, value, () => this.SelectedPod);
+                if (this.context != null)
+                {
+                    this.context.Dispose();
+                }
+                    this.context = new MusterContext();
+                    var query = this.context.pod.FirstOrDefault(p => p.id_pod == value.id_pod);
+                    if (query == null)
+                    {
+                        return;
+                    }
+                    this.SetProperty(ref this.selectedPod, query, () => this.SelectedPod);
+                    this.Abrechnungen = new ObservableCollection<abrechnung>(this.context.abrechnung.ToList());
+                Task.Run(() => this.CalculateObsoleteValue(this.selectedPod));
+
             }
 
+        }
+
+        /// <summary>
+        /// Gets or sets the abrechnungen.
+        /// </summary>
+        public ObservableCollection<abrechnung> Abrechnungen
+        {
+            get
+            {
+                return this.abrechnungen;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.abrechnungen, value, () => this.Abrechnungen);
+            }
         }
 
         /// <summary>
@@ -264,20 +314,30 @@ namespace MusterApp.ViewModels
         /// <param name="choosedPod">
         /// The choosed pod.
         /// </param>
-        public string CalculateObsoleteValue(pod choosedPod)
+        public void CalculateObsoleteValue(pod choosedPod)
         {
             if (choosedPod == null)
             {
-                return string.Empty;
+                return;
             }
 
-            var obsolete = choosedPod.location;
+            using (var db = new MusterContext())
+            {
+                var query = db.pod.FirstOrDefault(p => p.id_pod == choosedPod.id_pod);
+                if (query == null)
+                {
+                    return;
+
+                }
+
+                var obsolete = query.location;
 
             var value = string.Empty + (from location in obsolete
                                                  from position in location.position_abrechnung
                                                  where position.abrechnung == null
                                                  select (int)position.preis).Sum();
-            return value;
+                this.ObsoleteValue = value;
+            }
         }
 
         /// <summary>
@@ -385,6 +445,28 @@ namespace MusterApp.ViewModels
         /// </summary>
         private void ExecuteInvoiceView()
         {
+            if (this.SelectedPod == null)
+            {
+                MessageBox.Show("Please select a POD first");
+                return;
+            }
+            if (this.context != null)
+            {
+                this.context.Dispose();
+            }
+            this.IsBusy = true;
+            
+                           this.context = new MusterContext();
+                            var query = this.context.pod.FirstOrDefault(p => p.id_pod == this.SelectedPod.id_pod);
+                            if (query == null)
+                            {
+                                return;
+                            }
+
+                            var list = new ObservableCollection<abrechnung>(query.abrechnung.ToList());
+                            this.Abrechnungen = list;
+                            this.IsBusy = false;
+            
             this.IsConfigVisible = false;
             this.IsInvoiceVisible = true;
             this.IsOverviewVisible = false;
@@ -401,8 +483,7 @@ namespace MusterApp.ViewModels
             }
 
            var result = this.context.Database.ExecuteSqlCommand("CALL PodBill({0})", this.SelectedPod.id_pod);
-           this.context.pod.Load();
-           this.ObsoleteValue = this.CalculateObsoleteValue(this.SelectedPod);
+            Task.Run(() => this.CalculateObsoleteValue(this.SelectedPod));
         }
 
         /// <summary>
@@ -410,9 +491,43 @@ namespace MusterApp.ViewModels
         /// </summary>
         private void ExecuteConfig()
         {
+
+            if (this.SelectedPod == null)
+            {
+                MessageBox.Show("Please select a pod first");
+                return;
+            }
+
+            if (this.context != null)
+            {
+                this.context.Dispose();
+            }
+            this.context = new MusterContext();
+            if (this.SelectedPod == null)
+            {
+                this.SelectedPod = this.context.pod.FirstOrDefault(p => p.id_pod == this.SelectedPod.id_pod);
+            }
             this.IsConfigVisible = true;
             this.IsInvoiceVisible = false;
             this.IsOverviewVisible = false;
+        }
+
+        /// <summary>
+        /// The refresh all.
+        /// </summary>
+        public void RefreshAll()
+
+        {
+            foreach (var location in SelectedPod.location)
+            {
+                this.context.Entry(location).Reload();
+            }
+
+            foreach (var abrechnung in SelectedPod.abrechnung)
+            {
+                this.context.Entry(abrechnung).Reload();
+            }
+
         }
 
         /// <summary>
@@ -471,25 +586,7 @@ namespace MusterApp.ViewModels
         {
             get
             {
-                //using (var db = new MusterDbContext())
-                //{
-                //    db.logging.Load();
-                //    var query = db.logging.ToList();
-                //    //var observablecollection = new ObservableCollection<logging>();
-                //    //query.ForEach(q => observablecollection.Add(q));
-                //    this.logging = new ObservableCollection<logging>(query);
-                //    return this.logging;
-                //}
-                try {
-                    var query = this.context.pod.ToList();
-                    this.pods = new ObservableCollection<pod>(query);
-                    return this.pods;
-                }
-                catch
-                {
-                    return null;
-                }
-                    
+                return this.pods;
             }
 
             set
@@ -537,6 +634,7 @@ namespace MusterApp.ViewModels
         /// </summary>
         private void ExecuteOverview()
         {
+            this.LoadEntities();
             this.IsConfigVisible = false;
             this.IsInvoiceVisible = false;
             this.IsOverviewVisible = true;
