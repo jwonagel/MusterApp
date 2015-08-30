@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DataOverviewViewModel.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The data overview view model.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace MusterApp.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Data.Entity;
+    using System.Linq;
     using System.Runtime.CompilerServices;
-    using System.Security.AccessControl;
+    using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Input;
 
-    using Microsoft.Practices.ObjectBuilder2;
-
     using MusterApp.Annotations;
-    using MusterApp.Models;
 
     using ServiceReportWizard.Utility;
 
@@ -26,20 +28,36 @@ namespace MusterApp.ViewModels
     /// </summary>
     public class DataOverviewViewModel : ViewModelBase
     {
+
+        /// <summary>
+        /// The new ln.
+        /// </summary>
+        private const string NewLn = "\n";
+
+        /// <summary>
+        /// The tab.
+        /// </summary>
+        private const string Tab = "\t";
+
+        /// <summary>
+        /// The pod bill command.
+        /// </summary>
+        private ICommand podBillCommand;
+
         /// <summary>
         /// The logging.
         /// </summary>
         private ObservableCollection<logging> logging;
 
         /// <summary>
-        /// The overview button.
+        /// The selected pod.
         /// </summary>
-        private ICommand overviewButton;
+        private pod selectedPod;
 
         /// <summary>
-        /// The property changed.
+        /// The is busy.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        private bool isBusy;
 
         /// <summary>
         /// The is overview visible.
@@ -66,6 +84,9 @@ namespace MusterApp.ViewModels
         /// </summary>
         private ObservableCollection<pod> pods;
 
+        /// <summary>
+        /// The abrechnungen.
+        /// </summary>
         private ObservableCollection<abrechnung> abrechnungen;
 
         /// <summary>
@@ -83,21 +104,28 @@ namespace MusterApp.ViewModels
         /// </summary>
         private string config;
 
-        private const string newLn = "\n";
-        private const string tab = "\t";
-
+        /// <summary>
+        /// The config button.
+        /// </summary>
         private ICommand configButton;
 
+        /// <summary>
+        /// The invoice button.
+        /// </summary>
         private ICommand invoiceButton;
 
-        private pod selectedPod;
+        /// <summary>
+        /// The overview button.
+        /// </summary>
+        private ICommand overviewButton;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataOverviewViewModel"/> class.
         /// </summary>
         public DataOverviewViewModel()
         {
-             this.LoadEntities();
+            this.LoadEntities();
         }
 
         /// <summary>
@@ -110,8 +138,8 @@ namespace MusterApp.ViewModels
                 this.context.Dispose();
             }
 
-                this.context = new MusterContext();
-                var query = this.context.pod.ToList();
+            this.context = new MusterContext();
+            var query = this.context.pod.ToList();
             if (this.Pods == null)
             {
                 this.Pods = new ObservableCollection<pod>(query);
@@ -131,7 +159,16 @@ namespace MusterApp.ViewModels
         {
             get
             {
-                return this.obsoleteValue;
+                if (this.obsoleteValue != null && this.obsoleteValue.Equals("0"))
+                {
+                    return "Momentan kein offener Betrag";
+                }
+                else if (this.obsoleteValue == null)
+                {
+                    return "Bitte POD auswählen";
+                }
+
+                return this.obsoleteValue + " CHF";
             }
 
             set
@@ -153,18 +190,26 @@ namespace MusterApp.ViewModels
 
             set
             {
+                if (value == null)
+                {
+                    this.SetProperty(ref this.selectedPod, null, () => this.SelectedPod);
+                    return;
+                }
+
                 if (this.context != null)
                 {
                     this.context.Dispose();
                 }
-                    this.context = new MusterContext();
-                    var query = this.context.pod.FirstOrDefault(p => p.id_pod == value.id_pod);
-                    if (query == null)
-                    {
-                        return;
-                    }
-                    this.SetProperty(ref this.selectedPod, query, () => this.SelectedPod);
-                    this.Abrechnungen = new ObservableCollection<abrechnung>(this.context.abrechnung.ToList());
+
+                this.context = new MusterContext();
+                var query = this.context.pod.FirstOrDefault(p => p.id_pod == value.id_pod);
+                if (query == null)
+                {
+                    return;
+                }
+
+                this.SetProperty(ref this.selectedPod, query, () => this.SelectedPod);
+                this.Abrechnungen = new ObservableCollection<abrechnung>(this.context.abrechnung.ToList());
                 Task.Run(() => this.CalculateObsoleteValue(this.selectedPod));
 
             }
@@ -246,6 +291,9 @@ namespace MusterApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the config button.
+        /// </summary>
         public ICommand ConfigButton
         {
             get
@@ -254,8 +302,9 @@ namespace MusterApp.ViewModels
             }
         }
 
-
-
+        /// <summary>
+        /// Gets the invoice button.
+        /// </summary>
         public ICommand InvoiceButton
         {
             get
@@ -264,7 +313,7 @@ namespace MusterApp.ViewModels
             }
         }
 
- 
+
 
         /// <summary>
         /// Gets the overview button.
@@ -300,12 +349,90 @@ namespace MusterApp.ViewModels
             }
         }
 
-        private void ExecuteGenerateConfig(object obj)
+
+        /// <summary>
+        /// Gets or sets the config.
+        /// </summary>
+        public string Config
         {
-            this.IsBusy = true;
-            var ok = Task.Run(() => this.GenerateConfigAsync(obj));
+            get
+            {
+                if (this.config == null)
+                {
+                    return string.Empty;
+                }
+
+                return this.config;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.config, value, () => this.Config);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the logging.
+        /// </summary>
+        public ObservableCollection<logging> Logging
+        {
+            get
+            {
+                // using (var db = new MusterDbContext())
+                // {
+                // db.logging.Load();
+                // var query = db.logging.ToList();
+                // //var observablecollection = new ObservableCollection<logging>();
+                // //query.ForEach(q => observablecollection.Add(q));
+                // this.logging = new ObservableCollection<logging>(query);
+                // return this.logging;
+                // }
+                var query = this.context.logging.ToList();
+                this.logging = new ObservableCollection<logging>(query);
+                return this.logging;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.logging, value, () => this.Logging);
+
+            }
+
+        }
 
 
+
+        /// <summary>
+        /// Gets or sets the logging.
+        /// </summary>
+        public ObservableCollection<pod> Pods
+        {
+            get
+            {
+                return this.pods;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.pods, value, () => this.Pods);
+
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is busy.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return this.isBusy;
+            }
+
+            set
+            {
+                this.SetProperty(ref this.isBusy, value, () => this.IsBusy);
+            }
         }
 
         /// <summary>
@@ -332,12 +459,51 @@ namespace MusterApp.ViewModels
 
                 var obsolete = query.location;
 
-            var value = string.Empty + (from location in obsolete
-                                                 from position in location.position_abrechnung
-                                                 where position.abrechnung == null
-                                                 select (int)position.preis).Sum();
+                var value = string.Empty + (from location in obsolete
+                                            from position in location.position_abrechnung
+                                            where position.abrechnung == null
+                                            select (int)position.preis).Sum();
                 this.ObsoleteValue = value;
             }
+        }
+
+        /// <summary>
+        /// The refresh all.
+        /// </summary>
+        public void RefreshAll()
+        {
+            foreach (var location in this.SelectedPod.location)
+            {
+                this.context.Entry(location).Reload();
+            }
+
+            foreach (var abrechnung in this.SelectedPod.abrechnung)
+            {
+                this.context.Entry(abrechnung).Reload();
+            }
+        }
+
+        /// <summary>
+        /// The execute overview.
+        /// </summary>
+        private void ExecuteOverview()
+        {
+            this.LoadEntities();
+            this.IsConfigVisible = false;
+            this.IsInvoiceVisible = false;
+            this.IsOverviewVisible = true;
+        }
+
+        /// <summary>
+        /// The execute generate config.
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        private void ExecuteGenerateConfig(object obj)
+        {
+            this.IsBusy = true;
+            Task.Run(() => this.GenerateConfigAsync(obj));
         }
 
         /// <summary>
@@ -360,69 +526,59 @@ namespace MusterApp.ViewModels
 
             var netzwerkInterface = device.netzwerkinterface.ToList();
             var vlansList = device.netzwerkinterface.Select(v => v.vlan);
-            var vlans = new List<vlan>();
-            foreach (var vilan in vlansList)
-            {
-                foreach(var vlan in vilan)
-                {
-                    vlans.Add(vlan);
-                }
-            }
+            var vlans = vlansList.SelectMany(vilan => vilan).ToList();
 
-            string vlanConfig = string.Empty;
+            var vlanConfig = string.Empty;
             foreach (var vlan in vlans)
             {
                 vlanConfig += "vlan " + vlan.id_vlan;
-                vlanConfig += newLn+tab;
+                vlanConfig += NewLn + Tab;
                 vlanConfig += "name " + vlan.bezeichnung;
-                vlanConfig += newLn + newLn;
+                vlanConfig += NewLn + NewLn;
             }
 
-            var nwifsConfig =string.Empty;
+            var nwifsConfig = string.Empty;
             foreach (var netzwerkif in netzwerkInterface)
             {
                 var vlan = netzwerkif.vlan;
-                foreach(var tempVlan in vlan)
+                foreach (var tempVlan in vlan)
                 {
                     nwifsConfig += "interface vlan " + tempVlan.bezeichnung;
-                    nwifsConfig += newLn + tab;
-                    nwifsConfig +=  "nameif "+ netzwerkif.name;
-                    nwifsConfig += newLn + tab;
+                    nwifsConfig += NewLn + Tab;
+                    nwifsConfig += "nameif " + netzwerkif.name;
+                    nwifsConfig += NewLn + Tab;
                     nwifsConfig += "ip adress " + tempVlan.net_adress;
                     nwifsConfig += "  " + tempVlan.subnetmask;
-                    nwifsConfig += newLn + tab;
+                    nwifsConfig += NewLn + Tab;
                     nwifsConfig += "ip default-gateway " + tempVlan.standart_gateway;
-                    nwifsConfig += newLn + newLn;
+                    nwifsConfig += NewLn + NewLn;
                 }
             }
 
             var credentials = device.administrativ_credentials_snmp_comunity.Select(a => a.administrativ_credentials);
-            string userConfig = string.Empty;
-            foreach(var credential in credentials)
+            var userConfig = string.Empty;
+            foreach (var credential in credentials)
             {
                 userConfig += "user name " + credential.benutzer;
-                userConfig += newLn + tab;
+                userConfig += NewLn + Tab;
                 userConfig += "privilege 10";
-                userConfig += newLn + tab;
+                userConfig += NewLn + Tab;
                 userConfig += "password " + credential.passwort;
-                userConfig += newLn + newLn;
+                userConfig += NewLn + NewLn;
             }
 
             var location = device.location;
             var pod = location.pod;
 
-            string podConfig = "ip domain-name " + pod.domain;
-            podConfig += newLn;
+            var podConfig = "ip domain-name " + pod.domain;
+            podConfig += NewLn;
             podConfig += "ip name-server" + pod.nameserver;
-            podConfig += newLn;
+            podConfig += NewLn;
             podConfig += "clock timezone " + pod.zeitzone;
-            podConfig += newLn;
+            podConfig += NewLn;
             podConfig += "sntp server " + pod.SNTP_ADDRESS;
 
-
-
             this.Config = vlanConfig + nwifsConfig + userConfig + podConfig;
-
             this.IsBusy = false;
             return true;
         }
@@ -450,23 +606,25 @@ namespace MusterApp.ViewModels
                 MessageBox.Show("Please select a POD first");
                 return;
             }
+
             if (this.context != null)
             {
                 this.context.Dispose();
             }
-            this.IsBusy = true;
-            
-                           this.context = new MusterContext();
-                            var query = this.context.pod.FirstOrDefault(p => p.id_pod == this.SelectedPod.id_pod);
-                            if (query == null)
-                            {
-                                return;
-                            }
 
-                            var list = new ObservableCollection<abrechnung>(query.abrechnung.ToList());
-                            this.Abrechnungen = list;
-                            this.IsBusy = false;
-            
+            this.IsBusy = true;
+
+            this.context = new MusterContext();
+            var query = this.context.pod.FirstOrDefault(p => p.id_pod == this.SelectedPod.id_pod);
+            if (query == null)
+            {
+                return;
+            }
+
+            var list = new ObservableCollection<abrechnung>(query.abrechnung.ToList());
+            this.Abrechnungen = list;
+            this.IsBusy = false;
+
             this.IsConfigVisible = false;
             this.IsInvoiceVisible = true;
             this.IsOverviewVisible = false;
@@ -482,7 +640,7 @@ namespace MusterApp.ViewModels
                 return;
             }
 
-           var result = this.context.Database.ExecuteSqlCommand("CALL PodBill({0})", this.SelectedPod.id_pod);
+            var result = this.context.Database.ExecuteSqlCommand("CALL PodBill({0})", this.SelectedPod.id_pod);
             Task.Run(() => this.CalculateObsoleteValue(this.SelectedPod));
         }
 
@@ -491,7 +649,6 @@ namespace MusterApp.ViewModels
         /// </summary>
         private void ExecuteConfig()
         {
-
             if (this.SelectedPod == null)
             {
                 MessageBox.Show("Please select a pod first");
@@ -502,142 +659,16 @@ namespace MusterApp.ViewModels
             {
                 this.context.Dispose();
             }
+
             this.context = new MusterContext();
             if (this.SelectedPod == null)
             {
                 this.SelectedPod = this.context.pod.FirstOrDefault(p => p.id_pod == this.SelectedPod.id_pod);
             }
+
             this.IsConfigVisible = true;
             this.IsInvoiceVisible = false;
             this.IsOverviewVisible = false;
-        }
-
-        /// <summary>
-        /// The refresh all.
-        /// </summary>
-        public void RefreshAll()
-
-        {
-            foreach (var location in SelectedPod.location)
-            {
-                this.context.Entry(location).Reload();
-            }
-
-            foreach (var abrechnung in SelectedPod.abrechnung)
-            {
-                this.context.Entry(abrechnung).Reload();
-            }
-
-        }
-
-        /// <summary>
-        /// Gets or sets the config.
-        /// </summary>
-        public string Config
-        {
-            get
-            {
-                if(this.config == null)
-                {
-                    return string.Empty;
-                }
-                return this.config;
-            }
-
-            set
-            {
-                this.SetProperty(ref this.config, value, () => this.Config);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the logging.
-        /// </summary>
-        public ObservableCollection<logging> Logging
-        {
-            get
-            {
-                //using (var db = new MusterDbContext())
-                //{
-                //    db.logging.Load();
-                //    var query = db.logging.ToList();
-                //    //var observablecollection = new ObservableCollection<logging>();
-                //    //query.ForEach(q => observablecollection.Add(q));
-                //    this.logging = new ObservableCollection<logging>(query);
-                //    return this.logging;
-                //}
-                var query = this.context.logging.ToList();
-                this.logging = new ObservableCollection<logging>(query);
-                return this.logging;
-            }
-
-            set
-            {
-                this.SetProperty(ref this.logging, value, () => this.Logging);
-
-            }
-        
-        }
-
-        /// <summary>
-        /// Gets or sets the logging.
-        /// </summary>
-        public ObservableCollection<pod> Pods
-        {
-            get
-            {
-                return this.pods;
-            }
-
-            set
-            {
-                this.SetProperty(ref this.pods, value, () => this.Pods);
-
-            }
-        }
-
-        private bool isBusy;
-
-        private ICommand podBillCommand;
-
-        public bool IsBusy
-        {
-            get
-            {
-                return this.isBusy;
-            }
-
-            set
-            {
-                this.SetProperty(ref this.isBusy, value, () => this.IsBusy);
-            }
-        }
-
-        /// <summary>
-        /// The on property changed.
-        /// </summary>
-        /// <param name="propertyName">
-        /// The property name.
-        /// </param>
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        /// <summary>
-        /// The execute overview.
-        /// </summary>
-        private void ExecuteOverview()
-        {
-            this.LoadEntities();
-            this.IsConfigVisible = false;
-            this.IsInvoiceVisible = false;
-            this.IsOverviewVisible = true;
         }
     }
 }

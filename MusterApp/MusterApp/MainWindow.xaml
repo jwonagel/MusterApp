@@ -9,22 +9,22 @@
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:musterApp="clr-namespace:MusterApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" 
+        Title="MusterApp" Height="800" Width="1280" 
         >
     <Window.Resources>
         <viewModels:DataOverviewViewModel x:Key="ViewModel"/>
         <converters:BooleanToVisibilityExtendedConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvoiceVisibilityConverter x:Key="InvoiceVisibilityConverter"/>
         <converters:StatisticsConverter x:Key="StatisticsConverter"/>
-        
+
         <Style x:Key="overviewValueStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Light" />
-            <Setter Property="FontSize" Value="30" />
+            <Setter Property="FontSize" Value="35" />
         </Style>
 
         <Style x:Key="overviewLabelStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI" />
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontSize" Value="25" />
         </Style>
 
         <DataTemplate x:Key="ComboBoxTemplate">
@@ -33,7 +33,7 @@
                 <TextBlock Text="{Binding id_pod}"/>
                 <TextBlock Text=" - "/>
                 <TextBlock Text="Kunde: "/>
-                <TextBlock Text="{Binding kunde.name}"></TextBlock>
+                <TextBlock Text="{Binding kunde.name}"/>
             </StackPanel>
         </DataTemplate>
 
@@ -64,16 +64,16 @@
                                     OpenDropDownOnFocus="True"
                                     Height="30"
                                     Width="200"
-                                    EmptyText="Please select POD"
+                                    EmptyText="POD auswählen"
                                     ItemTemplate="{StaticResource ComboBoxTemplate}"
                                     telerik:TextSearch.TextPath="id_pod"
                                     SelectedValue="{Binding SelectedPod}"
                                     />
             </Grid>
-            
-            
+
+
             <Grid Grid.Column="1" Grid.Row="0">
-                
+
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                         <Label Content="{Binding ElementName=SelectedPod, Path=SelectedItem.name}"/>
@@ -91,68 +91,68 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        
-        
+
+
         <Grid Grid.Row="1" >
-            <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" BusyContent="Loading Invoices">
-            <telerik:RadGridView  
+            <telerik:RadBusyIndicator IsBusy="{Binding IsBusy}" BusyContent="Lade Abrechnungen">
+                <telerik:RadGridView  
         		Visibility="{Binding IsInvoiceVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
         		ItemsSource="{Binding Abrechnungen}"
         		ShowGroupPanel="False"
         		AutoGenerateColumns="False">
-                <telerik:RadGridView.ChildTableDefinitions>
-                    <telerik:GridViewTableDefinition/>
-                </telerik:RadGridView.ChildTableDefinitions>
-                <telerik:RadGridView.HierarchyChildTemplate>
-                    <DataTemplate>
-                        <telerik:RadGridView  ShowColumnFooters="True"
+                    <telerik:RadGridView.ChildTableDefinitions>
+                        <telerik:GridViewTableDefinition/>
+                    </telerik:RadGridView.ChildTableDefinitions>
+                    <telerik:RadGridView.HierarchyChildTemplate>
+                        <DataTemplate>
+                            <telerik:RadGridView  ShowColumnFooters="True"
         					ShowGroupFooters="True"
         					ShowGroupPanel="False"
         					AutoGenerateColumns="False"
         					Background="Azure"
         					Foreground="Black"
         					ItemsSource="{Binding position_abrechnung}">
-                            <telerik:RadGridView.Columns>
-                                <telerik:GridViewDataColumn DataMemberBinding="{Binding id_position}">
-                                    <telerik:GridViewDataColumn.AggregateFunctions>
-                                        <telerik:CountFunction Caption="Positions: " />
-                                    </telerik:GridViewDataColumn.AggregateFunctions>
-                                </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn DataMemberBinding="{Binding name}"/>
-                                <telerik:GridViewDataColumn DataMemberBinding="{Binding preis}"
+                                <telerik:RadGridView.Columns>
+                                    <telerik:GridViewDataColumn Header="Abrechungsposition Id" DataMemberBinding="{Binding id_position}">
+                                        <telerik:GridViewDataColumn.AggregateFunctions>
+                                            <telerik:CountFunction Caption="Positionen: " />
+                                        </telerik:GridViewDataColumn.AggregateFunctions>
+                                    </telerik:GridViewDataColumn>
+                                    <telerik:GridViewDataColumn Header="Name" DataMemberBinding="{Binding name}"/>
+                                    <telerik:GridViewDataColumn Header="Preis" DataMemberBinding="{Binding preis}"
         							UniqueName="price">
-                                    <telerik:GridViewDataColumn.AggregateFunctions>
-                                        <telerik:SumFunction Caption="Price Sum CHF: " />
-                                    </telerik:GridViewDataColumn.AggregateFunctions>
-                                </telerik:GridViewDataColumn>
-                                <telerik:GridViewDataColumn DataMemberBinding="{Binding device.hostname}"/>
-                                <telerik:GridViewDataColumn DataMemberBinding="{Binding netzwerkinterface.name}"/>
-                            </telerik:RadGridView.Columns>
-                        </telerik:RadGridView>
-                    </DataTemplate>
-                </telerik:RadGridView.HierarchyChildTemplate>
+                                        <telerik:GridViewDataColumn.AggregateFunctions>
+                                            <telerik:SumFunction Caption="Gesammtpreis Abrechnung CHF: " />
+                                        </telerik:GridViewDataColumn.AggregateFunctions>
+                                    </telerik:GridViewDataColumn>
+                                    <telerik:GridViewDataColumn Header="Hostname" DataMemberBinding="{Binding device.hostname}"/>
+                                    <telerik:GridViewDataColumn Header="Neztwerkinterface" DataMemberBinding="{Binding netzwerkinterface.name}"/>
+                                </telerik:RadGridView.Columns>
+                            </telerik:RadGridView>
+                        </DataTemplate>
+                    </telerik:RadGridView.HierarchyChildTemplate>
 
-                <telerik:RadGridView.Columns>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding id_abrechnung}"/>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding referenz}"/>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.ort}"/>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.plz}"/>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding adresse.strasse}"/>
-                    <telerik:GridViewDataColumn DataMemberBinding="{Binding fakturierungsdatum}"/>
-                    <telerik:GridViewDataColumn IsReadOnly="True">
-                        <telerik:GridViewDataColumn.CellTemplate>
-                            <DataTemplate>
-                                <telerik:RadButton Content="Invoice" 
+                    <telerik:RadGridView.Columns>
+                        <telerik:GridViewDataColumn Header="Abrechnungs Id" DataMemberBinding="{Binding id_abrechnung}"/>
+                        <telerik:GridViewDataColumn Header="Refrenztext" DataMemberBinding="{Binding referenz}"/>
+                        <telerik:GridViewDataColumn Header="Ort" DataMemberBinding="{Binding adresse.ort}"/>
+                        <telerik:GridViewDataColumn Header="Plz" DataMemberBinding="{Binding adresse.plz}"/>
+                        <telerik:GridViewDataColumn Header="Strasse" DataMemberBinding="{Binding adresse.strasse}"/>
+                        <telerik:GridViewDataColumn Header="Fakturierungsdatum" DataMemberBinding="{Binding fakturierungsdatum}"/>
+                        <telerik:GridViewDataColumn IsReadOnly="True">
+                            <telerik:GridViewDataColumn.CellTemplate>
+                                <DataTemplate>
+                                    <telerik:RadButton Content="Abrechnen" 
         							Command="{Binding InvoiceCommand, Source={StaticResource ViewModel}}" 
         							CommandParameter="{Binding}"
         							IsEnabled="{Binding ., Converter={StaticResource InvoiceVisibilityConverter}}"
                                                    />
-                            </DataTemplate>
-                        </telerik:GridViewDataColumn.CellTemplate>
+                                </DataTemplate>
+                            </telerik:GridViewDataColumn.CellTemplate>
 
-                    </telerik:GridViewDataColumn>
-                </telerik:RadGridView.Columns>
-            </telerik:RadGridView>
+                        </telerik:GridViewDataColumn>
+                    </telerik:RadGridView.Columns>
+                </telerik:RadGridView>
             </telerik:RadBusyIndicator>
         </Grid>
         <Grid Grid.Row="1"
@@ -175,7 +175,7 @@
                     </Grid.RowDefinitions>
                     <Grid>
                         <StackPanel>
-                            <Label Content="Choose a Location:"/>
+                            <Label Content="Location auswählen:"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
@@ -189,7 +189,7 @@
                     </Grid>
                     <Grid Grid.Column="0" Grid.Row="2">
                         <StackPanel>
-                            <Label Content="Choose a Device:"/>
+                            <Label Content="Gerät auswählen:"/>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
@@ -210,39 +210,26 @@
                     </Grid>
 
                     <Grid Grid.Column="0" Grid.Row="5">
-                        <telerik:RadButton Content="Save Config" Click="ButtonBase_OnClick"/>
+                        <telerik:RadButton Content="Konfiguration speichern" Click="ButtonBase_OnClick"/>
                     </Grid>
                 </Grid>
             </telerik:RadBusyIndicator>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0"
               Visibility="{Binding IsOverviewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-        <Grid Margin="0,50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid Margin="0,50">
 
-            <Grid>
-                <StackPanel Margin="20,0,0,0">
-                    <TextBlock Style="{StaticResource overviewLabelStyle}" 
-                           Text="Obsolete Value in Pod:"/>
-                    <!--<TextBlock Text="{Binding ElementName=SelectedPod,
-                        Path=SelectedItem,
-                        Converter={StaticResource StatisticsConverter}, ConverterParameter={x:Static models:Params.Obsolete}}" 
-                               Style="{StaticResource  overviewValueStyle}"/>-->
-                    <TextBlock Style="{StaticResource overviewValueStyle}"
-                               Text="{Binding ObsoleteValue}" ></TextBlock>
-                    <telerik:RadButton Margin="0, 10" Command="{Binding ExecutePodBillCommand}"
-                                       Content="Create Invoice for selected Pod"></telerik:RadButton>
-                </StackPanel>
-            </Grid>
+                <Grid>
+                    <StackPanel Margin="20,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource overviewLabelStyle}" 
+                           Text="Ausstehender Betrag im POD"
+                               TextAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Style="{StaticResource overviewValueStyle}"
+                               Text="{Binding ObsoleteValue}" />
+                        <telerik:RadButton Width="200" Margin="0, 10" Command="{Binding ExecutePodBillCommand}"
+                                       Content="Abrechnung für POD erstellen"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
 
