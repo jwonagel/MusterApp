@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:MusterApp.ViewModels"
         xmlns:converters="clr-namespace:MusterApp.Converters"
+        xmlns:models="clr-namespace:MusterApp.Models"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:musterApp="clr-namespace:MusterApp"
         mc:Ignorable="d"
         Title="MusterApp" Height="800" Width="1280" 
         >
     <Window.Resources>
-        <viewModels:DataOverviewViewModel x:Key="ViewModel" />
+        <viewModels:DataOverviewViewModel x:Key="ViewModel"/>
         <converters:BooleanToVisibilityExtendedConverter x:Key="BooleanToVisibilityConverter" />
         <converters:InvoiceVisibilityConverter x:Key="InvoiceVisibilityConverter"/>
         <converters:StatisticsConverter x:Key="StatisticsConverter"/>

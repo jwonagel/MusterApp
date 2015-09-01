@@ -18,7 +18,7 @@ namespace MusterApp
     public partial class MusterContext : DbContext
     {
         public MusterContext()
-            : base("MusterContext")
+            : base("name=MusterContext")
         {
         }
     

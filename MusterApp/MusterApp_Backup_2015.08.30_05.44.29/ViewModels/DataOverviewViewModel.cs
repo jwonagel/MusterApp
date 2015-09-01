@@ -138,22 +138,12 @@ namespace MusterApp.ViewModels
                 this.context.Dispose();
             }
 
-            try
+            this.context = new MusterContext();
+            var query = this.context.pod.ToList();
+            if (this.Pods == null)
             {
-                this.context = new MusterContext();
-                var query = this.context.pod.ToList();
-                if (this.Pods == null)
-                {
-                    this.Pods = new ObservableCollection<pod>(query);
-                }
+                this.Pods = new ObservableCollection<pod>(query);
             }
-            catch (Exception e)
-            {
-
-                MessageBox.Show("Keine Verbindung zur Datenbank");
-                return;
-            }
-            
 
         }
 
@@ -531,7 +521,6 @@ namespace MusterApp.ViewModels
             var device = obj as device;
             if (device == null)
             {
-                this.IsBusy = false;
                 return false;
             }
 

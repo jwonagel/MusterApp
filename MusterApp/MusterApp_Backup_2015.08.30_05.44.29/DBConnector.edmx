@@ -1,0 +1,1873 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MusterModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="abrechnung">
+          <Key>
+            <PropertyRef Name="id_abrechnung" />
+          </Key>
+          <Property Name="id_abrechnung" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="referenz" Type="varchar" MaxLength="45" />
+          <Property Name="pod_id_pod" Type="int" Nullable="false" />
+          <Property Name="adresse_id_adresse" Type="int" Nullable="false" />
+          <Property Name="fakturierungsdatum" Type="timestamp" Precision="0" Nullable="false" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.abrechnung_zahlung' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="abrechnung_zahlung">
+          <Key>
+            <PropertyRef Name="abrechnung_id_abrechnung" />
+            <PropertyRef Name="zahlung_id_zahlung" />
+          </Key>
+          <Property Name="abrechnung_id_abrechnung" Type="int" Nullable="false" />
+          <Property Name="zahlung_id_zahlung" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="administrativ_credentials">
+          <Key>
+            <PropertyRef Name="id_administrative_credentials" />
+          </Key>
+          <Property Name="id_administrative_credentials" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="benutzer" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="passwort" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="administrativ_credentials_snmp_comunity">
+          <Key>
+            <PropertyRef Name="id_administrativ_credentials" />
+          </Key>
+          <Property Name="id_administrativ_credentials" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="administrativ_credentials_id_administrativ_credentials" Type="int" Nullable="false" />
+          <Property Name="snmp_comunity_id_snmpcomunity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="adresse">
+          <Key>
+            <PropertyRef Name="id_adresse" />
+          </Key>
+          <Property Name="id_adresse" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="strasse" Type="varchar" MaxLength="45" />
+          <Property Name="hausnummer" Type="varchar" MaxLength="45" />
+          <Property Name="plz" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="ort" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="land" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="device">
+          <Key>
+            <PropertyRef Name="id_device" />
+          </Key>
+          <Property Name="id_device" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="location_id_location" Type="int" />
+          <Property Name="seriennummer" Type="varchar" MaxLength="45" />
+          <Property Name="hostname" Type="varchar" MaxLength="45" />
+          <Property Name="device_typ_id_devicetyp" Type="int" Nullable="false" />
+          <Property Name="isActive" Type="tinyint" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.device_administrave_credentials_snmpcomunity' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="device_administrave_credentials_snmpcomunity">
+          <Key>
+            <PropertyRef Name="device_id_device" />
+            <PropertyRef Name="id_credentials_snmp" />
+          </Key>
+          <Property Name="device_id_device" Type="int" Nullable="false" />
+          <Property Name="id_credentials_snmp" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="device_typ">
+          <Key>
+            <PropertyRef Name="id_device_typ" />
+          </Key>
+          <Property Name="id_device_typ" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="geraete_typ" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="virtuel" Type="bool" Nullable="false" />
+          <Property Name="hersteller_id_hersteller" Type="int" />
+          <Property Name="geraetebezeichnung_id_geraetebezeichnung" Type="int" Nullable="false" />
+          <Property Name="geraetetyp_id_geraetetyp" Type="int" />
+          <Property Name="preis" Type="decimal" Precision="4" Scale="0" />
+        </EntityType>
+        <EntityType Name="geraetebezeichnung">
+          <Key>
+            <PropertyRef Name="id_geraetebezeichnung" />
+          </Key>
+          <Property Name="id_geraetebezeichnung" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="geraetebezeichnung" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="geraetetyp">
+          <Key>
+            <PropertyRef Name="id_geraetetyp" />
+          </Key>
+          <Property Name="id_geraetetyp" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="geraetetyp" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="hersteller">
+          <Key>
+            <PropertyRef Name="id_hersteller" />
+          </Key>
+          <Property Name="id_hersteller" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.hersteller_lieferant' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="hersteller_lieferant">
+          <Key>
+            <PropertyRef Name="hersteller_id_hersteller" />
+            <PropertyRef Name="lieferant_id_lieferant" />
+          </Key>
+          <Property Name="hersteller_id_hersteller" Type="int" Nullable="false" />
+          <Property Name="lieferant_id_lieferant" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kunde">
+          <Key>
+            <PropertyRef Name="id_kunde" />
+          </Key>
+          <Property Name="id_kunde" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.kunde_adresse' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="kunde_adresse">
+          <Key>
+            <PropertyRef Name="id_kunde" />
+            <PropertyRef Name="adresse_id_adresse" />
+          </Key>
+          <Property Name="id_kunde" Type="int" Nullable="false" />
+          <Property Name="adresse_id_adresse" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lieferant">
+          <Key>
+            <PropertyRef Name="id_lieferant" />
+          </Key>
+          <Property Name="id_lieferant" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="adresse_adresse_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id_location" />
+          </Key>
+          <Property Name="id_location" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="location_name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="adresse_id_adresse" Type="int" Nullable="false" />
+          <Property Name="pod_id_pod" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="logging">
+          <Key>
+            <PropertyRef Name="id_logging" />
+          </Key>
+          <Property Name="severity" Type="tinyint" />
+          <Property Name="lognachricht" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="zeitpunkt" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="device_id_device" Type="int" Nullable="false" />
+          <Property Name="id_logging" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="quittiert" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="netzwerkinterface">
+          <Key>
+            <PropertyRef Name="id_netzwerkinterface" />
+          </Key>
+          <Property Name="id_netzwerkinterface" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="45" />
+          <Property Name="device_id_device" Type="int" Nullable="false" />
+          <Property Name="fullduplex" Type="bool" />
+          <Property Name="virtuel" Type="bool" />
+          <Property Name="mac_adresse" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="bandbreite_mbit" Type="int" />
+          <Property Name="netzwerkinterface_id_netzwerkinterface" Type="int" />
+          <Property Name="Medium" Type="varchar" MaxLength="45" />
+          <Property Name="Portnummer" Type="int" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.netzwerkinterface_vlan' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="netzwerkinterface_vlan">
+          <Key>
+            <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            <PropertyRef Name="vlan_id_vlan" />
+          </Key>
+          <Property Name="netzwerkinterface_id_netzwerkinterface" Type="int" Nullable="false" />
+          <Property Name="vlan_id_vlan" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="id_person" />
+          </Key>
+          <Property Name="id_person" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vorname" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="nachname" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="telefonnr" Type="varchar" MaxLength="45" />
+          <Property Name="email" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="pod">
+          <Key>
+            <PropertyRef Name="id_pod" />
+          </Key>
+          <Property Name="id_pod" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="zeitzone" Type="varchar" MaxLength="45" />
+          <Property Name="id_kunde" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="46" />
+          <Property Name="domain" Type="varchar" MaxLength="45" />
+          <Property Name="nameserver" Type="varchar" MaxLength="45" />
+          <Property Name="SNTP_ADDRESS" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <!--Während der Generierung sind Fehler aufgetreten:
+Warnung 6002: Für Tabelle/Sicht 'def.muster.pod_person' ist kein Primärschlüssel definiert. Der Schlüssel wurde abgeleitet, und die Definition wurde als schreibgeschützte Tabelle/Sicht erstellt.-->
+        <EntityType Name="pod_person">
+          <Key>
+            <PropertyRef Name="pod_id_pod" />
+            <PropertyRef Name="person_id_person" />
+            <PropertyRef Name="prioritaet" />
+          </Key>
+          <Property Name="pod_id_pod" Type="int" Nullable="false" />
+          <Property Name="person_id_person" Type="int" Nullable="false" />
+          <Property Name="prioritaet" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="position_abrechnung">
+          <Key>
+            <PropertyRef Name="id_position" />
+          </Key>
+          <Property Name="id_position" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="abrechnung_id_abrechnung" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="preis" Type="decimal" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="netzwerkinterface_id_netzwerkinterface" Type="int" />
+          <Property Name="device_id_device" Type="int" />
+          <Property Name="location_id_location" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="snmp_comunity">
+          <Key>
+            <PropertyRef Name="id_comunity" />
+          </Key>
+          <Property Name="id_comunity" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="comunity_name" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vlan">
+          <Key>
+            <PropertyRef Name="id_vlan" />
+          </Key>
+          <Property Name="id_vlan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="bezeichnung" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="net_adress" Type="varchar" MaxLength="20" />
+          <Property Name="subnetmask" Type="varchar" MaxLength="20" />
+          <Property Name="standart_gateway" Type="varchar" MaxLength="20" />
+          <Property Name="location_id_location" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zahlung">
+          <Key>
+            <PropertyRef Name="id_zahlung" />
+          </Key>
+          <Property Name="id_zahlung" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kunde_id" Type="int" Nullable="false" />
+          <Property Name="betrag" Type="decimal" Precision="4" Scale="0" />
+          <Property Name="zahlungsdatum" Type="timestamp" Precision="0" Nullable="false" />
+        </EntityType>
+        <Association Name="abrechnung_ibfk_1">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="abrechnung">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abrechnung_ibfk_2">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="abrechnung">
+              <PropertyRef Name="adresse_id_adresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abrechnung_zahlung_ibfk_1">
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="1" />
+          <End Role="abrechnung_zahlung" Type="Self.abrechnung_zahlung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="abrechnung">
+              <PropertyRef Name="id_abrechnung" />
+            </Principal>
+            <Dependent Role="abrechnung_zahlung">
+              <PropertyRef Name="abrechnung_id_abrechnung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abrechnung_zahlung_ibfk_2">
+          <End Role="zahlung" Type="Self.zahlung" Multiplicity="1" />
+          <End Role="abrechnung_zahlung" Type="Self.abrechnung_zahlung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zahlung">
+              <PropertyRef Name="id_zahlung" />
+            </Principal>
+            <Dependent Role="abrechnung_zahlung">
+              <PropertyRef Name="zahlung_id_zahlung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="administrativ_credentials_snmp_comunity_ibfk_1">
+          <End Role="administrativ_credentials" Type="Self.administrativ_credentials" Multiplicity="1" />
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="administrativ_credentials">
+              <PropertyRef Name="id_administrative_credentials" />
+            </Principal>
+            <Dependent Role="administrativ_credentials_snmp_comunity">
+              <PropertyRef Name="administrativ_credentials_id_administrativ_credentials" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="administrativ_credentials_snmp_comunity_ibfk_2">
+          <End Role="snmp_comunity" Type="Self.snmp_comunity" Multiplicity="1" />
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="snmp_comunity">
+              <PropertyRef Name="id_comunity" />
+            </Principal>
+            <Dependent Role="administrativ_credentials_snmp_comunity">
+              <PropertyRef Name="snmp_comunity_id_snmpcomunity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_administrave_credentials_snmpcomunity_ibfk_1">
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="1" />
+          <End Role="device_administrave_credentials_snmpcomunity" Type="Self.device_administrave_credentials_snmpcomunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="administrativ_credentials_snmp_comunity">
+              <PropertyRef Name="id_administrativ_credentials" />
+            </Principal>
+            <Dependent Role="device_administrave_credentials_snmpcomunity">
+              <PropertyRef Name="id_credentials_snmp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_administrave_credentials_snmpcomunity_ibfk_2">
+          <End Role="device" Type="Self.device" Multiplicity="1" />
+          <End Role="device_administrave_credentials_snmpcomunity" Type="Self.device_administrave_credentials_snmpcomunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="device_administrave_credentials_snmpcomunity">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_ibfk_1">
+          <End Role="location" Type="Self.location" Multiplicity="0..1" />
+          <End Role="device" Type="Self.device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="device">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_ibfk_2">
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="1" />
+          <End Role="device" Type="Self.device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device_typ">
+              <PropertyRef Name="id_device_typ" />
+            </Principal>
+            <Dependent Role="device">
+              <PropertyRef Name="device_typ_id_devicetyp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_1">
+          <End Role="hersteller" Type="Self.hersteller" Multiplicity="0..1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hersteller">
+              <PropertyRef Name="id_hersteller" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="hersteller_id_hersteller" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_2">
+          <End Role="geraetebezeichnung" Type="Self.geraetebezeichnung" Multiplicity="1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="geraetebezeichnung">
+              <PropertyRef Name="id_geraetebezeichnung" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="geraetebezeichnung_id_geraetebezeichnung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_3">
+          <End Role="geraetetyp" Type="Self.geraetetyp" Multiplicity="0..1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="geraetetyp">
+              <PropertyRef Name="id_geraetetyp" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="geraetetyp_id_geraetetyp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="hersteller_lieferant_ibfk_1">
+          <End Role="hersteller" Type="Self.hersteller" Multiplicity="1" />
+          <End Role="hersteller_lieferant" Type="Self.hersteller_lieferant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hersteller">
+              <PropertyRef Name="id_hersteller" />
+            </Principal>
+            <Dependent Role="hersteller_lieferant">
+              <PropertyRef Name="hersteller_id_hersteller" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="hersteller_lieferant_ibfk_2">
+          <End Role="lieferant" Type="Self.lieferant" Multiplicity="1" />
+          <End Role="hersteller_lieferant" Type="Self.hersteller_lieferant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lieferant">
+              <PropertyRef Name="id_lieferant" />
+            </Principal>
+            <Dependent Role="hersteller_lieferant">
+              <PropertyRef Name="lieferant_id_lieferant" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="kunde_adresse_ibfk_1">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="1" />
+          <End Role="kunde_adresse" Type="Self.kunde_adresse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kunde">
+              <PropertyRef Name="id_kunde" />
+            </Principal>
+            <Dependent Role="kunde_adresse">
+              <PropertyRef Name="id_kunde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="kunde_adresse_ibfk_2">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="kunde_adresse" Type="Self.kunde_adresse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="kunde_adresse">
+              <PropertyRef Name="adresse_id_adresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lieferant_ibfk_1">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="lieferant" Type="Self.lieferant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="lieferant">
+              <PropertyRef Name="adresse_adresse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="location_ibfk_1">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="location" Type="Self.location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="location">
+              <PropertyRef Name="adresse_id_adresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="location_ibfk_2">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="location" Type="Self.location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="location">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="logging_ibfk_1">
+          <End Role="device" Type="Self.device" Multiplicity="1" />
+          <End Role="logging" Type="Self.logging" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="logging">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_ibfk_1">
+          <End Role="device" Type="Self.device" Multiplicity="1" />
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="netzwerkinterface">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_ibfk_2">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="0..1" />
+          <End Role="netzwerkinterface1" Type="Self.netzwerkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="netzwerkinterface">
+              <PropertyRef Name="id_netzwerkinterface" />
+            </Principal>
+            <Dependent Role="netzwerkinterface1">
+              <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_vlan_ibfk_1">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="1" />
+          <End Role="netzwerkinterface_vlan" Type="Self.netzwerkinterface_vlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="netzwerkinterface">
+              <PropertyRef Name="id_netzwerkinterface" />
+            </Principal>
+            <Dependent Role="netzwerkinterface_vlan">
+              <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_vlan_ibfk_2">
+          <End Role="vlan" Type="Self.vlan" Multiplicity="1" />
+          <End Role="netzwerkinterface_vlan" Type="Self.netzwerkinterface_vlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vlan">
+              <PropertyRef Name="id_vlan" />
+            </Principal>
+            <Dependent Role="netzwerkinterface_vlan">
+              <PropertyRef Name="vlan_id_vlan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_ibfk_1">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="1" />
+          <End Role="pod" Type="Self.pod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kunde">
+              <PropertyRef Name="id_kunde" />
+            </Principal>
+            <Dependent Role="pod">
+              <PropertyRef Name="id_kunde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_person_ibfk_1">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="pod_person" Type="Self.pod_person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="pod_person">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_person_ibfk_2">
+          <End Role="person" Type="Self.person" Multiplicity="1" />
+          <End Role="pod_person" Type="Self.pod_person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="id_person" />
+            </Principal>
+            <Dependent Role="pod_person">
+              <PropertyRef Name="person_id_person" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_1">
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="abrechnung">
+              <PropertyRef Name="id_abrechnung" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="abrechnung_id_abrechnung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_2">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="netzwerkinterface">
+              <PropertyRef Name="id_netzwerkinterface" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_3">
+          <End Role="device" Type="Self.device" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_4">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vlan_ibfk_1">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="vlan" Type="Self.vlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="vlan">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="zahlung_ibfk_1">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="1" />
+          <End Role="zahlung" Type="Self.zahlung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kunde">
+              <PropertyRef Name="id_kunde" />
+            </Principal>
+            <Dependent Role="zahlung">
+              <PropertyRef Name="kunde_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="LogClear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="muster">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="MusterModelStoreContainer">
+          <EntitySet Name="abrechnung" EntityType="Self.abrechnung" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="administrativ_credentials" EntityType="Self.administrativ_credentials" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="administrativ_credentials_snmp_comunity" EntityType="Self.administrativ_credentials_snmp_comunity" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="adresse" EntityType="Self.adresse" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="device" EntityType="Self.device" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="device_typ" EntityType="Self.device_typ" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="geraetebezeichnung" EntityType="Self.geraetebezeichnung" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="geraetetyp" EntityType="Self.geraetetyp" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="hersteller" EntityType="Self.hersteller" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="kunde" EntityType="Self.kunde" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="lieferant" EntityType="Self.lieferant" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="location" EntityType="Self.location" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="logging" EntityType="Self.logging" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="netzwerkinterface" EntityType="Self.netzwerkinterface" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="person" EntityType="Self.person" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="pod" EntityType="Self.pod" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="position_abrechnung" EntityType="Self.position_abrechnung" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="snmp_comunity" EntityType="Self.snmp_comunity" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="vlan" EntityType="Self.vlan" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="zahlung" EntityType="Self.zahlung" Schema="muster" store:Type="Tables" />
+          <EntitySet Name="abrechnung_zahlung" EntityType="Self.abrechnung_zahlung" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`abrechnung_zahlung`.`abrechnung_id_abrechnung`, 
+`abrechnung_zahlung`.`zahlung_id_zahlung`
+FROM `abrechnung_zahlung` AS `abrechnung_zahlung`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="device_administrave_credentials_snmpcomunity" EntityType="Self.device_administrave_credentials_snmpcomunity" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`device_administrave_credentials_snmpcomunity`.`device_id_device`, 
+`device_administrave_credentials_snmpcomunity`.`id_credentials_snmp`
+FROM `device_administrave_credentials_snmpcomunity` AS `device_administrave_credentials_snmpcomunity`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="hersteller_lieferant" EntityType="Self.hersteller_lieferant" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`hersteller_lieferant`.`hersteller_id_hersteller`, 
+`hersteller_lieferant`.`lieferant_id_lieferant`
+FROM `hersteller_lieferant` AS `hersteller_lieferant`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="kunde_adresse" EntityType="Self.kunde_adresse" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`kunde_adresse`.`id_kunde`, 
+`kunde_adresse`.`adresse_id_adresse`
+FROM `kunde_adresse` AS `kunde_adresse`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="netzwerkinterface_vlan" EntityType="Self.netzwerkinterface_vlan" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`netzwerkinterface_vlan`.`netzwerkinterface_id_netzwerkinterface`, 
+`netzwerkinterface_vlan`.`vlan_id_vlan`
+FROM `netzwerkinterface_vlan` AS `netzwerkinterface_vlan`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="pod_person" EntityType="Self.pod_person" store:Type="Tables" store:Schema="muster">
+            <DefiningQuery>SELECT
+`pod_person`.`pod_id_pod`, 
+`pod_person`.`person_id_person`, 
+`pod_person`.`prioritaet`
+FROM `pod_person` AS `pod_person`</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="abrechnung_ibfk_1" Association="Self.abrechnung_ibfk_1">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="abrechnung" EntitySet="abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="abrechnung_ibfk_2" Association="Self.abrechnung_ibfk_2">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="abrechnung" EntitySet="abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="abrechnung_zahlung_ibfk_1" Association="Self.abrechnung_zahlung_ibfk_1">
+            <End Role="abrechnung" EntitySet="abrechnung" />
+            <End Role="abrechnung_zahlung" EntitySet="abrechnung_zahlung" />
+          </AssociationSet>
+          <AssociationSet Name="abrechnung_zahlung_ibfk_2" Association="Self.abrechnung_zahlung_ibfk_2">
+            <End Role="zahlung" EntitySet="zahlung" />
+            <End Role="abrechnung_zahlung" EntitySet="abrechnung_zahlung" />
+          </AssociationSet>
+          <AssociationSet Name="administrativ_credentials_snmp_comunity_ibfk_1" Association="Self.administrativ_credentials_snmp_comunity_ibfk_1">
+            <End Role="administrativ_credentials" EntitySet="administrativ_credentials" />
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+          </AssociationSet>
+          <AssociationSet Name="administrativ_credentials_snmp_comunity_ibfk_2" Association="Self.administrativ_credentials_snmp_comunity_ibfk_2">
+            <End Role="snmp_comunity" EntitySet="snmp_comunity" />
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+          </AssociationSet>
+          <AssociationSet Name="device_administrave_credentials_snmpcomunity_ibfk_1" Association="Self.device_administrave_credentials_snmpcomunity_ibfk_1">
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+            <End Role="device_administrave_credentials_snmpcomunity" EntitySet="device_administrave_credentials_snmpcomunity" />
+          </AssociationSet>
+          <AssociationSet Name="device_administrave_credentials_snmpcomunity_ibfk_2" Association="Self.device_administrave_credentials_snmpcomunity_ibfk_2">
+            <End Role="device" EntitySet="device" />
+            <End Role="device_administrave_credentials_snmpcomunity" EntitySet="device_administrave_credentials_snmpcomunity" />
+          </AssociationSet>
+          <AssociationSet Name="device_ibfk_1" Association="Self.device_ibfk_1">
+            <End Role="location" EntitySet="location" />
+            <End Role="device" EntitySet="device" />
+          </AssociationSet>
+          <AssociationSet Name="device_ibfk_2" Association="Self.device_ibfk_2">
+            <End Role="device_typ" EntitySet="device_typ" />
+            <End Role="device" EntitySet="device" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_1" Association="Self.device_typ_ibfk_1">
+            <End Role="hersteller" EntitySet="hersteller" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_2" Association="Self.device_typ_ibfk_2">
+            <End Role="geraetebezeichnung" EntitySet="geraetebezeichnung" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_3" Association="Self.device_typ_ibfk_3">
+            <End Role="geraetetyp" EntitySet="geraetetyp" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="hersteller_lieferant_ibfk_1" Association="Self.hersteller_lieferant_ibfk_1">
+            <End Role="hersteller" EntitySet="hersteller" />
+            <End Role="hersteller_lieferant" EntitySet="hersteller_lieferant" />
+          </AssociationSet>
+          <AssociationSet Name="hersteller_lieferant_ibfk_2" Association="Self.hersteller_lieferant_ibfk_2">
+            <End Role="lieferant" EntitySet="lieferant" />
+            <End Role="hersteller_lieferant" EntitySet="hersteller_lieferant" />
+          </AssociationSet>
+          <AssociationSet Name="kunde_adresse_ibfk_1" Association="Self.kunde_adresse_ibfk_1">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="kunde_adresse" EntitySet="kunde_adresse" />
+          </AssociationSet>
+          <AssociationSet Name="kunde_adresse_ibfk_2" Association="Self.kunde_adresse_ibfk_2">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="kunde_adresse" EntitySet="kunde_adresse" />
+          </AssociationSet>
+          <AssociationSet Name="lieferant_ibfk_1" Association="Self.lieferant_ibfk_1">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="lieferant" EntitySet="lieferant" />
+          </AssociationSet>
+          <AssociationSet Name="location_ibfk_1" Association="Self.location_ibfk_1">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="location" EntitySet="location" />
+          </AssociationSet>
+          <AssociationSet Name="location_ibfk_2" Association="Self.location_ibfk_2">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="location" EntitySet="location" />
+          </AssociationSet>
+          <AssociationSet Name="logging_ibfk_1" Association="Self.logging_ibfk_1">
+            <End Role="device" EntitySet="device" />
+            <End Role="logging" EntitySet="logging" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_ibfk_1" Association="Self.netzwerkinterface_ibfk_1">
+            <End Role="device" EntitySet="device" />
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_ibfk_2" Association="Self.netzwerkinterface_ibfk_2">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="netzwerkinterface1" EntitySet="netzwerkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_vlan_ibfk_1" Association="Self.netzwerkinterface_vlan_ibfk_1">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="netzwerkinterface_vlan" EntitySet="netzwerkinterface_vlan" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_vlan_ibfk_2" Association="Self.netzwerkinterface_vlan_ibfk_2">
+            <End Role="vlan" EntitySet="vlan" />
+            <End Role="netzwerkinterface_vlan" EntitySet="netzwerkinterface_vlan" />
+          </AssociationSet>
+          <AssociationSet Name="pod_ibfk_1" Association="Self.pod_ibfk_1">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="pod" EntitySet="pod" />
+          </AssociationSet>
+          <AssociationSet Name="pod_person_ibfk_1" Association="Self.pod_person_ibfk_1">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="pod_person" EntitySet="pod_person" />
+          </AssociationSet>
+          <AssociationSet Name="pod_person_ibfk_2" Association="Self.pod_person_ibfk_2">
+            <End Role="person" EntitySet="person" />
+            <End Role="pod_person" EntitySet="pod_person" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_1" Association="Self.position_abrechnung_ibfk_1">
+            <End Role="abrechnung" EntitySet="abrechnung" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_2" Association="Self.position_abrechnung_ibfk_2">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_3" Association="Self.position_abrechnung_ibfk_3">
+            <End Role="device" EntitySet="device" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_4" Association="Self.position_abrechnung_ibfk_4">
+            <End Role="location" EntitySet="location" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="vlan_ibfk_1" Association="Self.vlan_ibfk_1">
+            <End Role="location" EntitySet="location" />
+            <End Role="vlan" EntitySet="vlan" />
+          </AssociationSet>
+          <AssociationSet Name="zahlung_ibfk_1" Association="Self.zahlung_ibfk_1">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="zahlung" EntitySet="zahlung" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MusterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="abrechnung">
+          <Key>
+            <PropertyRef Name="id_abrechnung" />
+          </Key>
+          <Property Name="id_abrechnung" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="referenz" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="pod_id_pod" Type="Int32" Nullable="false" />
+          <Property Name="adresse_id_adresse" Type="Int32" Nullable="false" />
+          <Property Name="fakturierungsdatum" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="pod" Relationship="Self.abrechnung_ibfk_1" FromRole="abrechnung" ToRole="pod" />
+          <NavigationProperty Name="adresse" Relationship="Self.abrechnung_ibfk_2" FromRole="abrechnung" ToRole="adresse" />
+          <NavigationProperty Name="position_abrechnung" Relationship="Self.position_abrechnung_ibfk_1" FromRole="abrechnung" ToRole="position_abrechnung" />
+          <NavigationProperty Name="zahlung" Relationship="Self.abrechnung_zahlung" FromRole="abrechnung" ToRole="zahlung" />
+        </EntityType>
+        <EntityType Name="administrativ_credentials">
+          <Key>
+            <PropertyRef Name="id_administrative_credentials" />
+          </Key>
+          <Property Name="id_administrative_credentials" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="benutzer" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="passwort" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="administrativ_credentials_snmp_comunity" Relationship="Self.administrativ_credentials_snmp_comunity_ibfk_1" FromRole="administrativ_credentials" ToRole="administrativ_credentials_snmp_comunity" />
+        </EntityType>
+        <EntityType Name="administrativ_credentials_snmp_comunity" Abstract="false">
+          <Key>
+            <PropertyRef Name="id_administrativ_credentials" />
+          </Key>
+          <Property Name="id_administrativ_credentials" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="administrativ_credentials_id_administrativ_credentials" Type="Int32" Nullable="false" />
+          <Property Name="snmp_comunity_id_snmpcomunity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="administrativ_credentials" Relationship="Self.administrativ_credentials_snmp_comunity_ibfk_1" FromRole="administrativ_credentials_snmp_comunity" ToRole="administrativ_credentials" />
+          <NavigationProperty Name="snmp_comunity" Relationship="Self.administrativ_credentials_snmp_comunity_ibfk_2" FromRole="administrativ_credentials_snmp_comunity" ToRole="snmp_comunity" />
+          <NavigationProperty Name="device" Relationship="Self.device_administrave_credentials_snmpcomunity" FromRole="administrativ_credentials_snmp_comunity" ToRole="device" />
+        </EntityType>
+        <EntityType Name="adresse">
+          <Key>
+            <PropertyRef Name="id_adresse" />
+          </Key>
+          <Property Name="id_adresse" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="strasse" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="hausnummer" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="plz" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ort" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="land" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="abrechnung" Relationship="Self.abrechnung_ibfk_2" FromRole="adresse" ToRole="abrechnung" />
+          <NavigationProperty Name="lieferant" Relationship="Self.lieferant_ibfk_1" FromRole="adresse" ToRole="lieferant" />
+          <NavigationProperty Name="location" Relationship="Self.location_ibfk_1" FromRole="adresse" ToRole="location" />
+          <NavigationProperty Name="kunde" Relationship="Self.kunde_adresse" FromRole="adresse" ToRole="kunde" />
+        </EntityType>
+        <EntityType Name="device">
+          <Key>
+            <PropertyRef Name="id_device" />
+          </Key>
+          <Property Name="id_device" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location_id_location" Type="Int32" />
+          <Property Name="seriennummer" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="hostname" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="device_typ_id_devicetyp" Type="Int32" Nullable="false" />
+          <Property Name="isActive" Type="SByte" />
+          <NavigationProperty Name="location" Relationship="Self.device_ibfk_1" FromRole="device" ToRole="location" />
+          <NavigationProperty Name="device_typ" Relationship="Self.device_ibfk_2" FromRole="device" ToRole="device_typ" />
+          <NavigationProperty Name="logging" Relationship="Self.logging_ibfk_1" FromRole="device" ToRole="logging" />
+          <NavigationProperty Name="netzwerkinterface" Relationship="Self.netzwerkinterface_ibfk_1" FromRole="device" ToRole="netzwerkinterface" />
+          <NavigationProperty Name="position_abrechnung" Relationship="Self.position_abrechnung_ibfk_3" FromRole="device" ToRole="position_abrechnung" />
+          <NavigationProperty Name="administrativ_credentials_snmp_comunity" Relationship="Self.device_administrave_credentials_snmpcomunity" FromRole="device" ToRole="administrativ_credentials_snmp_comunity" />
+        </EntityType>
+        <EntityType Name="device_typ">
+          <Key>
+            <PropertyRef Name="id_device_typ" />
+          </Key>
+          <Property Name="id_device_typ" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="geraete_typ" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="virtuel" Type="Boolean" Nullable="false" />
+          <Property Name="hersteller_id_hersteller" Type="Int32" />
+          <Property Name="geraetebezeichnung_id_geraetebezeichnung" Type="Int32" Nullable="false" />
+          <Property Name="geraetetyp_id_geraetetyp" Type="Int32" />
+          <Property Name="preis" Type="Decimal" />
+          <NavigationProperty Name="device" Relationship="Self.device_ibfk_2" FromRole="device_typ" ToRole="device" />
+          <NavigationProperty Name="hersteller" Relationship="Self.device_typ_ibfk_1" FromRole="device_typ" ToRole="hersteller" />
+          <NavigationProperty Name="geraetebezeichnung" Relationship="Self.device_typ_ibfk_2" FromRole="device_typ" ToRole="geraetebezeichnung" />
+          <NavigationProperty Name="geraetetyp" Relationship="Self.device_typ_ibfk_3" FromRole="device_typ" ToRole="geraetetyp" />
+        </EntityType>
+        <EntityType Name="geraetebezeichnung">
+          <Key>
+            <PropertyRef Name="id_geraetebezeichnung" />
+          </Key>
+          <Property Name="id_geraetebezeichnung" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="geraetebezeichnung1" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="device_typ" Relationship="Self.device_typ_ibfk_2" FromRole="geraetebezeichnung" ToRole="device_typ" />
+        </EntityType>
+        <EntityType Name="geraetetyp">
+          <Key>
+            <PropertyRef Name="id_geraetetyp" />
+          </Key>
+          <Property Name="id_geraetetyp" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="geraetetyp1" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="device_typ" Relationship="Self.device_typ_ibfk_3" FromRole="geraetetyp" ToRole="device_typ" />
+        </EntityType>
+        <EntityType Name="hersteller">
+          <Key>
+            <PropertyRef Name="id_hersteller" />
+          </Key>
+          <Property Name="id_hersteller" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="device_typ" Relationship="Self.device_typ_ibfk_1" FromRole="hersteller" ToRole="device_typ" />
+          <NavigationProperty Name="lieferant" Relationship="Self.hersteller_lieferant" FromRole="hersteller" ToRole="lieferant" />
+        </EntityType>
+        <EntityType Name="kunde">
+          <Key>
+            <PropertyRef Name="id_kunde" />
+          </Key>
+          <Property Name="id_kunde" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="pod" Relationship="Self.pod_ibfk_1" FromRole="kunde" ToRole="pod" />
+          <NavigationProperty Name="zahlung" Relationship="Self.zahlung_ibfk_1" FromRole="kunde" ToRole="zahlung" />
+          <NavigationProperty Name="adresse" Relationship="Self.kunde_adresse" FromRole="kunde" ToRole="adresse" />
+        </EntityType>
+        <EntityType Name="lieferant">
+          <Key>
+            <PropertyRef Name="id_lieferant" />
+          </Key>
+          <Property Name="id_lieferant" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="adresse_adresse_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="adresse" Relationship="Self.lieferant_ibfk_1" FromRole="lieferant" ToRole="adresse" />
+          <NavigationProperty Name="hersteller" Relationship="Self.hersteller_lieferant" FromRole="lieferant" ToRole="hersteller" />
+        </EntityType>
+        <EntityType Name="location">
+          <Key>
+            <PropertyRef Name="id_location" />
+          </Key>
+          <Property Name="id_location" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="adresse_id_adresse" Type="Int32" Nullable="false" />
+          <Property Name="pod_id_pod" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="adresse" Relationship="Self.location_ibfk_1" FromRole="location" ToRole="adresse" />
+          <NavigationProperty Name="device" Relationship="Self.device_ibfk_1" FromRole="location" ToRole="device" />
+          <NavigationProperty Name="pod" Relationship="Self.location_ibfk_2" FromRole="location" ToRole="pod" />
+          <NavigationProperty Name="position_abrechnung" Relationship="Self.position_abrechnung_ibfk_4" FromRole="location" ToRole="position_abrechnung" />
+          <NavigationProperty Name="vlan" Relationship="Self.vlan_ibfk_1" FromRole="location" ToRole="vlan" />
+        </EntityType>
+        <EntityType Name="logging">
+          <Key>
+            <PropertyRef Name="id_logging" />
+          </Key>
+          <Property Name="severity" Type="SByte" />
+          <Property Name="lognachricht" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="zeitpunkt" Type="DateTime" Nullable="false" />
+          <Property Name="device_id_device" Type="Int32" Nullable="false" />
+          <Property Name="id_logging" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="quittiert" Type="SByte" />
+          <NavigationProperty Name="device" Relationship="Self.logging_ibfk_1" FromRole="logging" ToRole="device" />
+        </EntityType>
+        <EntityType Name="netzwerkinterface">
+          <Key>
+            <PropertyRef Name="id_netzwerkinterface" />
+          </Key>
+          <Property Name="id_netzwerkinterface" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="device_id_device" Type="Int32" Nullable="false" />
+          <Property Name="fullduplex" Type="Boolean" />
+          <Property Name="virtuel" Type="Boolean" />
+          <Property Name="mac_adresse" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bandbreite_mbit" Type="Int32" />
+          <Property Name="netzwerkinterface_id_netzwerkinterface" Type="Int32" />
+          <Property Name="Medium" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Portnummer" Type="Int32" />
+          <NavigationProperty Name="device" Relationship="Self.netzwerkinterface_ibfk_1" FromRole="netzwerkinterface" ToRole="device" />
+          <NavigationProperty Name="netzwerkinterface1" Relationship="Self.netzwerkinterface_ibfk_2" FromRole="netzwerkinterface" ToRole="netzwerkinterface1" />
+          <NavigationProperty Name="netzwerkinterface2" Relationship="Self.netzwerkinterface_ibfk_2" FromRole="netzwerkinterface1" ToRole="netzwerkinterface" />
+          <NavigationProperty Name="position_abrechnung" Relationship="Self.position_abrechnung_ibfk_2" FromRole="netzwerkinterface" ToRole="position_abrechnung" />
+          <NavigationProperty Name="vlan" Relationship="Self.netzwerkinterface_vlan" FromRole="netzwerkinterface" ToRole="vlan" />
+        </EntityType>
+        <EntityType Name="person">
+          <Key>
+            <PropertyRef Name="id_person" />
+          </Key>
+          <Property Name="id_person" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vorname" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nachname" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefonnr" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pod_person" Relationship="Self.pod_person_ibfk_2" FromRole="person" ToRole="pod_person" />
+        </EntityType>
+        <EntityType Name="pod">
+          <Key>
+            <PropertyRef Name="id_pod" />
+          </Key>
+          <Property Name="id_pod" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="zeitzone" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="id_kunde" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="abrechnung" Relationship="Self.abrechnung_ibfk_1" FromRole="pod" ToRole="abrechnung" />
+          <NavigationProperty Name="kunde" Relationship="Self.pod_ibfk_1" FromRole="pod" ToRole="kunde" />
+          <NavigationProperty Name="location" Relationship="Self.location_ibfk_2" FromRole="pod" ToRole="location" />
+          <NavigationProperty Name="pod_person" Relationship="Self.pod_person_ibfk_1" FromRole="pod" ToRole="pod_person" />
+          <Property Name="name" Type="String" MaxLength="46" FixedLength="false" Unicode="false" />
+          <Property Name="domain" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="nameserver" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="SNTP_ADDRESS" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="position_abrechnung">
+          <Key>
+            <PropertyRef Name="id_position" />
+          </Key>
+          <Property Name="id_position" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="abrechnung_id_abrechnung" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="preis" Type="Decimal" Nullable="false" />
+          <Property Name="netzwerkinterface_id_netzwerkinterface" Type="Int32" />
+          <Property Name="device_id_device" Type="Int32" />
+          <Property Name="location_id_location" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="abrechnung" Relationship="Self.position_abrechnung_ibfk_1" FromRole="position_abrechnung" ToRole="abrechnung" />
+          <NavigationProperty Name="device" Relationship="Self.position_abrechnung_ibfk_3" FromRole="position_abrechnung" ToRole="device" />
+          <NavigationProperty Name="location" Relationship="Self.position_abrechnung_ibfk_4" FromRole="position_abrechnung" ToRole="location" />
+          <NavigationProperty Name="netzwerkinterface" Relationship="Self.position_abrechnung_ibfk_2" FromRole="position_abrechnung" ToRole="netzwerkinterface" />
+        </EntityType>
+        <EntityType Name="snmp_comunity">
+          <Key>
+            <PropertyRef Name="id_comunity" />
+          </Key>
+          <Property Name="id_comunity" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="comunity_name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="administrativ_credentials_snmp_comunity" Relationship="Self.administrativ_credentials_snmp_comunity_ibfk_2" FromRole="snmp_comunity" ToRole="administrativ_credentials_snmp_comunity" />
+        </EntityType>
+        <EntityType Name="vlan">
+          <Key>
+            <PropertyRef Name="id_vlan" />
+          </Key>
+          <Property Name="id_vlan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="bezeichnung" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="net_adress" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="subnetmask" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="standart_gateway" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="location_id_location" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="location" Relationship="Self.vlan_ibfk_1" FromRole="vlan" ToRole="location" />
+          <NavigationProperty Name="netzwerkinterface" Relationship="Self.netzwerkinterface_vlan" FromRole="vlan" ToRole="netzwerkinterface" />
+        </EntityType>
+        <EntityType Name="zahlung">
+          <Key>
+            <PropertyRef Name="id_zahlung" />
+          </Key>
+          <Property Name="id_zahlung" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kunde_id" Type="Int32" Nullable="false" />
+          <Property Name="betrag" Type="Decimal" />
+          <Property Name="zahlungsdatum" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="kunde" Relationship="Self.zahlung_ibfk_1" FromRole="zahlung" ToRole="kunde" />
+          <NavigationProperty Name="abrechnung" Relationship="Self.abrechnung_zahlung" FromRole="zahlung" ToRole="abrechnung" />
+        </EntityType>
+        <EntityType Name="pod_person">
+          <Key>
+            <PropertyRef Name="pod_id_pod" />
+            <PropertyRef Name="person_id_person" />
+            <PropertyRef Name="prioritaet" />
+          </Key>
+          <Property Name="pod_id_pod" Type="Int32" Nullable="false" />
+          <Property Name="person_id_person" Type="Int32" Nullable="false" />
+          <Property Name="prioritaet" Type="SByte" Nullable="false" />
+          <NavigationProperty Name="person" Relationship="Self.pod_person_ibfk_2" FromRole="pod_person" ToRole="person" />
+          <NavigationProperty Name="pod" Relationship="Self.pod_person_ibfk_1" FromRole="pod_person" ToRole="pod" />
+        </EntityType>
+        <Association Name="abrechnung_ibfk_1">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="abrechnung">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abrechnung_ibfk_2">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="abrechnung">
+              <PropertyRef Name="adresse_id_adresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_1">
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="abrechnung">
+              <PropertyRef Name="id_abrechnung" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="abrechnung_id_abrechnung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="administrativ_credentials_snmp_comunity_ibfk_1">
+          <End Role="administrativ_credentials" Type="Self.administrativ_credentials" Multiplicity="1" />
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="administrativ_credentials">
+              <PropertyRef Name="id_administrative_credentials" />
+            </Principal>
+            <Dependent Role="administrativ_credentials_snmp_comunity">
+              <PropertyRef Name="administrativ_credentials_id_administrativ_credentials" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="administrativ_credentials_snmp_comunity_ibfk_2">
+          <End Role="snmp_comunity" Type="Self.snmp_comunity" Multiplicity="1" />
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="snmp_comunity">
+              <PropertyRef Name="id_comunity" />
+            </Principal>
+            <Dependent Role="administrativ_credentials_snmp_comunity">
+              <PropertyRef Name="snmp_comunity_id_snmpcomunity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lieferant_ibfk_1">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="lieferant" Type="Self.lieferant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="lieferant">
+              <PropertyRef Name="adresse_adresse_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="location_ibfk_1">
+          <End Role="adresse" Type="Self.adresse" Multiplicity="1" />
+          <End Role="location" Type="Self.location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="adresse">
+              <PropertyRef Name="id_adresse" />
+            </Principal>
+            <Dependent Role="location">
+              <PropertyRef Name="adresse_id_adresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_ibfk_1">
+          <End Role="location" Type="Self.location" Multiplicity="0..1" />
+          <End Role="device" Type="Self.device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="device">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_ibfk_2">
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="1" />
+          <End Role="device" Type="Self.device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device_typ">
+              <PropertyRef Name="id_device_typ" />
+            </Principal>
+            <Dependent Role="device">
+              <PropertyRef Name="device_typ_id_devicetyp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="logging_ibfk_1">
+          <End Role="device" Type="Self.device" Multiplicity="1" />
+          <End Role="logging" Type="Self.logging" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="logging">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_ibfk_1">
+          <End Role="device" Type="Self.device" Multiplicity="1" />
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="netzwerkinterface">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_3">
+          <End Role="device" Type="Self.device" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="device">
+              <PropertyRef Name="id_device" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="device_id_device" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_1">
+          <End Role="hersteller" Type="Self.hersteller" Multiplicity="0..1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="hersteller">
+              <PropertyRef Name="id_hersteller" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="hersteller_id_hersteller" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_2">
+          <End Role="geraetebezeichnung" Type="Self.geraetebezeichnung" Multiplicity="1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="geraetebezeichnung">
+              <PropertyRef Name="id_geraetebezeichnung" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="geraetebezeichnung_id_geraetebezeichnung" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="device_typ_ibfk_3">
+          <End Role="geraetetyp" Type="Self.geraetetyp" Multiplicity="0..1" />
+          <End Role="device_typ" Type="Self.device_typ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="geraetetyp">
+              <PropertyRef Name="id_geraetetyp" />
+            </Principal>
+            <Dependent Role="device_typ">
+              <PropertyRef Name="geraetetyp_id_geraetetyp" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_ibfk_1">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="1" />
+          <End Role="pod" Type="Self.pod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kunde">
+              <PropertyRef Name="id_kunde" />
+            </Principal>
+            <Dependent Role="pod">
+              <PropertyRef Name="id_kunde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="zahlung_ibfk_1">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="1" />
+          <End Role="zahlung" Type="Self.zahlung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="kunde">
+              <PropertyRef Name="id_kunde" />
+            </Principal>
+            <Dependent Role="zahlung">
+              <PropertyRef Name="kunde_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="location_ibfk_2">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="location" Type="Self.location" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="location">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_4">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vlan_ibfk_1">
+          <End Role="location" Type="Self.location" Multiplicity="1" />
+          <End Role="vlan" Type="Self.vlan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="location">
+              <PropertyRef Name="id_location" />
+            </Principal>
+            <Dependent Role="vlan">
+              <PropertyRef Name="location_id_location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="netzwerkinterface_ibfk_2">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="0..1" />
+          <End Role="netzwerkinterface1" Type="Self.netzwerkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="netzwerkinterface">
+              <PropertyRef Name="id_netzwerkinterface" />
+            </Principal>
+            <Dependent Role="netzwerkinterface1">
+              <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="position_abrechnung_ibfk_2">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="0..1" />
+          <End Role="position_abrechnung" Type="Self.position_abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="netzwerkinterface">
+              <PropertyRef Name="id_netzwerkinterface" />
+            </Principal>
+            <Dependent Role="position_abrechnung">
+              <PropertyRef Name="netzwerkinterface_id_netzwerkinterface" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_person_ibfk_2">
+          <End Role="person" Type="Self.person" Multiplicity="1" />
+          <End Role="pod_person" Type="Self.pod_person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="person">
+              <PropertyRef Name="id_person" />
+            </Principal>
+            <Dependent Role="pod_person">
+              <PropertyRef Name="person_id_person" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pod_person_ibfk_1">
+          <End Role="pod" Type="Self.pod" Multiplicity="1" />
+          <End Role="pod_person" Type="Self.pod_person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pod">
+              <PropertyRef Name="id_pod" />
+            </Principal>
+            <Dependent Role="pod_person">
+              <PropertyRef Name="pod_id_pod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abrechnung_zahlung">
+          <End Role="abrechnung" Type="Self.abrechnung" Multiplicity="*" />
+          <End Role="zahlung" Type="Self.zahlung" Multiplicity="*" />
+        </Association>
+        <Association Name="device_administrave_credentials_snmpcomunity">
+          <End Role="administrativ_credentials_snmp_comunity" Type="Self.administrativ_credentials_snmp_comunity" Multiplicity="*" />
+          <End Role="device" Type="Self.device" Multiplicity="*" />
+        </Association>
+        <Association Name="hersteller_lieferant">
+          <End Role="hersteller" Type="Self.hersteller" Multiplicity="*" />
+          <End Role="lieferant" Type="Self.lieferant" Multiplicity="*" />
+        </Association>
+        <Association Name="kunde_adresse">
+          <End Role="kunde" Type="Self.kunde" Multiplicity="*" />
+          <End Role="adresse" Type="Self.adresse" Multiplicity="*" />
+        </Association>
+        <Association Name="netzwerkinterface_vlan">
+          <End Role="netzwerkinterface" Type="Self.netzwerkinterface" Multiplicity="*" />
+          <End Role="vlan" Type="Self.vlan" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="MusterContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="abrechnung" EntityType="Self.abrechnung" />
+          <EntitySet Name="administrativ_credentials" EntityType="Self.administrativ_credentials" />
+          <EntitySet Name="administrativ_credentials_snmp_comunity" EntityType="Self.administrativ_credentials_snmp_comunity" />
+          <EntitySet Name="adresse" EntityType="Self.adresse" />
+          <EntitySet Name="device" EntityType="Self.device" />
+          <EntitySet Name="device_typ" EntityType="Self.device_typ" />
+          <EntitySet Name="geraetebezeichnung" EntityType="Self.geraetebezeichnung" />
+          <EntitySet Name="geraetetyp" EntityType="Self.geraetetyp" />
+          <EntitySet Name="hersteller" EntityType="Self.hersteller" />
+          <EntitySet Name="kunde" EntityType="Self.kunde" />
+          <EntitySet Name="lieferant" EntityType="Self.lieferant" />
+          <EntitySet Name="location" EntityType="Self.location" />
+          <EntitySet Name="logging" EntityType="Self.logging" />
+          <EntitySet Name="netzwerkinterface" EntityType="Self.netzwerkinterface" />
+          <EntitySet Name="person" EntityType="Self.person" />
+          <EntitySet Name="pod" EntityType="Self.pod" />
+          <EntitySet Name="position_abrechnung" EntityType="Self.position_abrechnung" />
+          <EntitySet Name="snmp_comunity" EntityType="Self.snmp_comunity" />
+          <EntitySet Name="vlan" EntityType="Self.vlan" />
+          <EntitySet Name="zahlung" EntityType="Self.zahlung" />
+          <EntitySet Name="pod_person" EntityType="Self.pod_person" />
+          <AssociationSet Name="abrechnung_ibfk_1" Association="Self.abrechnung_ibfk_1">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="abrechnung" EntitySet="abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="abrechnung_ibfk_2" Association="Self.abrechnung_ibfk_2">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="abrechnung" EntitySet="abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_1" Association="Self.position_abrechnung_ibfk_1">
+            <End Role="abrechnung" EntitySet="abrechnung" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="administrativ_credentials_snmp_comunity_ibfk_1" Association="Self.administrativ_credentials_snmp_comunity_ibfk_1">
+            <End Role="administrativ_credentials" EntitySet="administrativ_credentials" />
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+          </AssociationSet>
+          <AssociationSet Name="administrativ_credentials_snmp_comunity_ibfk_2" Association="Self.administrativ_credentials_snmp_comunity_ibfk_2">
+            <End Role="snmp_comunity" EntitySet="snmp_comunity" />
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+          </AssociationSet>
+          <AssociationSet Name="lieferant_ibfk_1" Association="Self.lieferant_ibfk_1">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="lieferant" EntitySet="lieferant" />
+          </AssociationSet>
+          <AssociationSet Name="location_ibfk_1" Association="Self.location_ibfk_1">
+            <End Role="adresse" EntitySet="adresse" />
+            <End Role="location" EntitySet="location" />
+          </AssociationSet>
+          <AssociationSet Name="device_ibfk_1" Association="Self.device_ibfk_1">
+            <End Role="location" EntitySet="location" />
+            <End Role="device" EntitySet="device" />
+          </AssociationSet>
+          <AssociationSet Name="device_ibfk_2" Association="Self.device_ibfk_2">
+            <End Role="device_typ" EntitySet="device_typ" />
+            <End Role="device" EntitySet="device" />
+          </AssociationSet>
+          <AssociationSet Name="logging_ibfk_1" Association="Self.logging_ibfk_1">
+            <End Role="device" EntitySet="device" />
+            <End Role="logging" EntitySet="logging" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_ibfk_1" Association="Self.netzwerkinterface_ibfk_1">
+            <End Role="device" EntitySet="device" />
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_3" Association="Self.position_abrechnung_ibfk_3">
+            <End Role="device" EntitySet="device" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_1" Association="Self.device_typ_ibfk_1">
+            <End Role="hersteller" EntitySet="hersteller" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_2" Association="Self.device_typ_ibfk_2">
+            <End Role="geraetebezeichnung" EntitySet="geraetebezeichnung" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="device_typ_ibfk_3" Association="Self.device_typ_ibfk_3">
+            <End Role="geraetetyp" EntitySet="geraetetyp" />
+            <End Role="device_typ" EntitySet="device_typ" />
+          </AssociationSet>
+          <AssociationSet Name="pod_ibfk_1" Association="Self.pod_ibfk_1">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="pod" EntitySet="pod" />
+          </AssociationSet>
+          <AssociationSet Name="zahlung_ibfk_1" Association="Self.zahlung_ibfk_1">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="zahlung" EntitySet="zahlung" />
+          </AssociationSet>
+          <AssociationSet Name="location_ibfk_2" Association="Self.location_ibfk_2">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="location" EntitySet="location" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_4" Association="Self.position_abrechnung_ibfk_4">
+            <End Role="location" EntitySet="location" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="vlan_ibfk_1" Association="Self.vlan_ibfk_1">
+            <End Role="location" EntitySet="location" />
+            <End Role="vlan" EntitySet="vlan" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_ibfk_2" Association="Self.netzwerkinterface_ibfk_2">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="netzwerkinterface1" EntitySet="netzwerkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="position_abrechnung_ibfk_2" Association="Self.position_abrechnung_ibfk_2">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="position_abrechnung" EntitySet="position_abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="pod_person_ibfk_2" Association="Self.pod_person_ibfk_2">
+            <End Role="person" EntitySet="person" />
+            <End Role="pod_person" EntitySet="pod_person" />
+          </AssociationSet>
+          <AssociationSet Name="pod_person_ibfk_1" Association="Self.pod_person_ibfk_1">
+            <End Role="pod" EntitySet="pod" />
+            <End Role="pod_person" EntitySet="pod_person" />
+          </AssociationSet>
+          <AssociationSet Name="abrechnung_zahlung" Association="Self.abrechnung_zahlung">
+            <End Role="abrechnung" EntitySet="abrechnung" />
+            <End Role="zahlung" EntitySet="zahlung" />
+          </AssociationSet>
+          <AssociationSet Name="device_administrave_credentials_snmpcomunity" Association="Self.device_administrave_credentials_snmpcomunity">
+            <End Role="administrativ_credentials_snmp_comunity" EntitySet="administrativ_credentials_snmp_comunity" />
+            <End Role="device" EntitySet="device" />
+          </AssociationSet>
+          <AssociationSet Name="hersteller_lieferant" Association="Self.hersteller_lieferant">
+            <End Role="hersteller" EntitySet="hersteller" />
+            <End Role="lieferant" EntitySet="lieferant" />
+          </AssociationSet>
+          <AssociationSet Name="kunde_adresse" Association="Self.kunde_adresse">
+            <End Role="kunde" EntitySet="kunde" />
+            <End Role="adresse" EntitySet="adresse" />
+          </AssociationSet>
+          <AssociationSet Name="netzwerkinterface_vlan" Association="Self.netzwerkinterface_vlan">
+            <End Role="netzwerkinterface" EntitySet="netzwerkinterface" />
+            <End Role="vlan" EntitySet="vlan" />
+          </AssociationSet>
+          <FunctionImport Name="LogClear">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MusterModelStoreContainer" CdmEntityContainer="MusterContext">
+          <EntitySetMapping Name="abrechnung">
+            <EntityTypeMapping TypeName="MusterModel.abrechnung">
+              <MappingFragment StoreEntitySet="abrechnung">
+                <ScalarProperty Name="id_abrechnung" ColumnName="id_abrechnung" />
+                <ScalarProperty Name="referenz" ColumnName="referenz" />
+                <ScalarProperty Name="pod_id_pod" ColumnName="pod_id_pod" />
+                <ScalarProperty Name="adresse_id_adresse" ColumnName="adresse_id_adresse" />
+                <ScalarProperty Name="fakturierungsdatum" ColumnName="fakturierungsdatum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="administrativ_credentials">
+            <EntityTypeMapping TypeName="MusterModel.administrativ_credentials">
+              <MappingFragment StoreEntitySet="administrativ_credentials">
+                <ScalarProperty Name="id_administrative_credentials" ColumnName="id_administrative_credentials" />
+                <ScalarProperty Name="benutzer" ColumnName="benutzer" />
+                <ScalarProperty Name="passwort" ColumnName="passwort" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="administrativ_credentials_snmp_comunity">
+            <EntityTypeMapping TypeName="MusterModel.administrativ_credentials_snmp_comunity">
+              <MappingFragment StoreEntitySet="administrativ_credentials_snmp_comunity">
+                <ScalarProperty Name="id_administrativ_credentials" ColumnName="id_administrativ_credentials" />
+                <ScalarProperty Name="administrativ_credentials_id_administrativ_credentials" ColumnName="administrativ_credentials_id_administrativ_credentials" />
+                <ScalarProperty Name="snmp_comunity_id_snmpcomunity" ColumnName="snmp_comunity_id_snmpcomunity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="adresse">
+            <EntityTypeMapping TypeName="MusterModel.adresse">
+              <MappingFragment StoreEntitySet="adresse">
+                <ScalarProperty Name="id_adresse" ColumnName="id_adresse" />
+                <ScalarProperty Name="strasse" ColumnName="strasse" />
+                <ScalarProperty Name="hausnummer" ColumnName="hausnummer" />
+                <ScalarProperty Name="plz" ColumnName="plz" />
+                <ScalarProperty Name="ort" ColumnName="ort" />
+                <ScalarProperty Name="land" ColumnName="land" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="device">
+            <EntityTypeMapping TypeName="MusterModel.device">
+              <MappingFragment StoreEntitySet="device">
+                <ScalarProperty Name="id_device" ColumnName="id_device" />
+                <ScalarProperty Name="location_id_location" ColumnName="location_id_location" />
+                <ScalarProperty Name="seriennummer" ColumnName="seriennummer" />
+                <ScalarProperty Name="hostname" ColumnName="hostname" />
+                <ScalarProperty Name="device_typ_id_devicetyp" ColumnName="device_typ_id_devicetyp" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="device_typ">
+            <EntityTypeMapping TypeName="MusterModel.device_typ">
+              <MappingFragment StoreEntitySet="device_typ">
+                <ScalarProperty Name="id_device_typ" ColumnName="id_device_typ" />
+                <ScalarProperty Name="geraete_typ" ColumnName="geraete_typ" />
+                <ScalarProperty Name="virtuel" ColumnName="virtuel" />
+                <ScalarProperty Name="hersteller_id_hersteller" ColumnName="hersteller_id_hersteller" />
+                <ScalarProperty Name="geraetebezeichnung_id_geraetebezeichnung" ColumnName="geraetebezeichnung_id_geraetebezeichnung" />
+                <ScalarProperty Name="geraetetyp_id_geraetetyp" ColumnName="geraetetyp_id_geraetetyp" />
+                <ScalarProperty Name="preis" ColumnName="preis" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="geraetebezeichnung">
+            <EntityTypeMapping TypeName="MusterModel.geraetebezeichnung">
+              <MappingFragment StoreEntitySet="geraetebezeichnung">
+                <ScalarProperty Name="id_geraetebezeichnung" ColumnName="id_geraetebezeichnung" />
+                <ScalarProperty Name="geraetebezeichnung1" ColumnName="geraetebezeichnung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="geraetetyp">
+            <EntityTypeMapping TypeName="MusterModel.geraetetyp">
+              <MappingFragment StoreEntitySet="geraetetyp">
+                <ScalarProperty Name="id_geraetetyp" ColumnName="id_geraetetyp" />
+                <ScalarProperty Name="geraetetyp1" ColumnName="geraetetyp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hersteller">
+            <EntityTypeMapping TypeName="MusterModel.hersteller">
+              <MappingFragment StoreEntitySet="hersteller">
+                <ScalarProperty Name="id_hersteller" ColumnName="id_hersteller" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kunde">
+            <EntityTypeMapping TypeName="MusterModel.kunde">
+              <MappingFragment StoreEntitySet="kunde">
+                <ScalarProperty Name="id_kunde" ColumnName="id_kunde" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lieferant">
+            <EntityTypeMapping TypeName="MusterModel.lieferant">
+              <MappingFragment StoreEntitySet="lieferant">
+                <ScalarProperty Name="id_lieferant" ColumnName="id_lieferant" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="adresse_adresse_id" ColumnName="adresse_adresse_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="location">
+            <EntityTypeMapping TypeName="MusterModel.location">
+              <MappingFragment StoreEntitySet="location">
+                <ScalarProperty Name="id_location" ColumnName="id_location" />
+                <ScalarProperty Name="location_name" ColumnName="location_name" />
+                <ScalarProperty Name="adresse_id_adresse" ColumnName="adresse_id_adresse" />
+                <ScalarProperty Name="pod_id_pod" ColumnName="pod_id_pod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logging">
+            <EntityTypeMapping TypeName="MusterModel.logging">
+              <MappingFragment StoreEntitySet="logging">
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="lognachricht" ColumnName="lognachricht" />
+                <ScalarProperty Name="zeitpunkt" ColumnName="zeitpunkt" />
+                <ScalarProperty Name="device_id_device" ColumnName="device_id_device" />
+                <ScalarProperty Name="id_logging" ColumnName="id_logging" />
+                <ScalarProperty Name="quittiert" ColumnName="quittiert" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="netzwerkinterface">
+            <EntityTypeMapping TypeName="MusterModel.netzwerkinterface">
+              <MappingFragment StoreEntitySet="netzwerkinterface">
+                <ScalarProperty Name="id_netzwerkinterface" ColumnName="id_netzwerkinterface" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="device_id_device" ColumnName="device_id_device" />
+                <ScalarProperty Name="fullduplex" ColumnName="fullduplex" />
+                <ScalarProperty Name="virtuel" ColumnName="virtuel" />
+                <ScalarProperty Name="mac_adresse" ColumnName="mac_adresse" />
+                <ScalarProperty Name="bandbreite_mbit" ColumnName="bandbreite_mbit" />
+                <ScalarProperty Name="netzwerkinterface_id_netzwerkinterface" ColumnName="netzwerkinterface_id_netzwerkinterface" />
+                <ScalarProperty Name="Medium" ColumnName="Medium" />
+                <ScalarProperty Name="Portnummer" ColumnName="Portnummer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="person">
+            <EntityTypeMapping TypeName="MusterModel.person">
+              <MappingFragment StoreEntitySet="person">
+                <ScalarProperty Name="id_person" ColumnName="id_person" />
+                <ScalarProperty Name="vorname" ColumnName="vorname" />
+                <ScalarProperty Name="nachname" ColumnName="nachname" />
+                <ScalarProperty Name="telefonnr" ColumnName="telefonnr" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pod">
+            <EntityTypeMapping TypeName="MusterModel.pod">
+              <MappingFragment StoreEntitySet="pod">
+                <ScalarProperty Name="SNTP_ADDRESS" ColumnName="SNTP_ADDRESS" />
+                <ScalarProperty Name="nameserver" ColumnName="nameserver" />
+                <ScalarProperty Name="domain" ColumnName="domain" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_pod" ColumnName="id_pod" />
+                <ScalarProperty Name="zeitzone" ColumnName="zeitzone" />
+                <ScalarProperty Name="id_kunde" ColumnName="id_kunde" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="position_abrechnung">
+            <EntityTypeMapping TypeName="MusterModel.position_abrechnung">
+              <MappingFragment StoreEntitySet="position_abrechnung">
+                <ScalarProperty Name="id_position" ColumnName="id_position" />
+                <ScalarProperty Name="abrechnung_id_abrechnung" ColumnName="abrechnung_id_abrechnung" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="preis" ColumnName="preis" />
+                <ScalarProperty Name="netzwerkinterface_id_netzwerkinterface" ColumnName="netzwerkinterface_id_netzwerkinterface" />
+                <ScalarProperty Name="device_id_device" ColumnName="device_id_device" />
+                <ScalarProperty Name="location_id_location" ColumnName="location_id_location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="snmp_comunity">
+            <EntityTypeMapping TypeName="MusterModel.snmp_comunity">
+              <MappingFragment StoreEntitySet="snmp_comunity">
+                <ScalarProperty Name="id_comunity" ColumnName="id_comunity" />
+                <ScalarProperty Name="comunity_name" ColumnName="comunity_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vlan">
+            <EntityTypeMapping TypeName="MusterModel.vlan">
+              <MappingFragment StoreEntitySet="vlan">
+                <ScalarProperty Name="id_vlan" ColumnName="id_vlan" />
+                <ScalarProperty Name="bezeichnung" ColumnName="bezeichnung" />
+                <ScalarProperty Name="net_adress" ColumnName="net_adress" />
+                <ScalarProperty Name="subnetmask" ColumnName="subnetmask" />
+                <ScalarProperty Name="standart_gateway" ColumnName="standart_gateway" />
+                <ScalarProperty Name="location_id_location" ColumnName="location_id_location" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zahlung">
+            <EntityTypeMapping TypeName="MusterModel.zahlung">
+              <MappingFragment StoreEntitySet="zahlung">
+                <ScalarProperty Name="id_zahlung" ColumnName="id_zahlung" />
+                <ScalarProperty Name="kunde_id" ColumnName="kunde_id" />
+                <ScalarProperty Name="betrag" ColumnName="betrag" />
+                <ScalarProperty Name="zahlungsdatum" ColumnName="zahlungsdatum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pod_person">
+            <EntityTypeMapping TypeName="MusterModel.pod_person">
+              <MappingFragment StoreEntitySet="pod_person">
+                <ScalarProperty Name="pod_id_pod" ColumnName="pod_id_pod" />
+                <ScalarProperty Name="person_id_person" ColumnName="person_id_person" />
+                <ScalarProperty Name="prioritaet" ColumnName="prioritaet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="abrechnung_zahlung" TypeName="MusterModel.abrechnung_zahlung" StoreEntitySet="abrechnung_zahlung">
+            <EndProperty Name="abrechnung">
+              <ScalarProperty Name="id_abrechnung" ColumnName="abrechnung_id_abrechnung" />
+            </EndProperty>
+            <EndProperty Name="zahlung">
+              <ScalarProperty Name="id_zahlung" ColumnName="zahlung_id_zahlung" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="device_administrave_credentials_snmpcomunity" TypeName="MusterModel.device_administrave_credentials_snmpcomunity" StoreEntitySet="device_administrave_credentials_snmpcomunity">
+            <EndProperty Name="administrativ_credentials_snmp_comunity">
+              <ScalarProperty Name="id_administrativ_credentials" ColumnName="id_credentials_snmp" />
+            </EndProperty>
+            <EndProperty Name="device">
+              <ScalarProperty Name="id_device" ColumnName="device_id_device" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="hersteller_lieferant" TypeName="MusterModel.hersteller_lieferant" StoreEntitySet="hersteller_lieferant">
+            <EndProperty Name="hersteller">
+              <ScalarProperty Name="id_hersteller" ColumnName="hersteller_id_hersteller" />
+            </EndProperty>
+            <EndProperty Name="lieferant">
+              <ScalarProperty Name="id_lieferant" ColumnName="lieferant_id_lieferant" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="kunde_adresse" TypeName="MusterModel.kunde_adresse" StoreEntitySet="kunde_adresse">
+            <EndProperty Name="kunde">
+              <ScalarProperty Name="id_kunde" ColumnName="id_kunde" />
+            </EndProperty>
+            <EndProperty Name="adresse">
+              <ScalarProperty Name="id_adresse" ColumnName="adresse_id_adresse" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="netzwerkinterface_vlan" TypeName="MusterModel.netzwerkinterface_vlan" StoreEntitySet="netzwerkinterface_vlan">
+            <EndProperty Name="netzwerkinterface">
+              <ScalarProperty Name="id_netzwerkinterface" ColumnName="netzwerkinterface_id_netzwerkinterface" />
+            </EndProperty>
+            <EndProperty Name="vlan">
+              <ScalarProperty Name="id_vlan" ColumnName="vlan_id_vlan" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="LogClear" FunctionName="MusterModel.Store.LogClear" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
